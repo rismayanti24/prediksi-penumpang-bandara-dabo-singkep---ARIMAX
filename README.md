@@ -2,6 +2,7 @@
 **Metode Penambangan Data (Data Mining): Model ARIMAX (AutoRegressive Integrated Moving Average with eXogenous Variables)**
 
 ---
+Mata Kuliah Penambangan Data 
 
 ## 📌 Ringkasan Proyek
 Proyek ini mengimplementasikan siklus lengkap **Penambangan Data (CRISP-DM)** untuk memprediksi jumlah penumpang mingguan per rute penerbangan di **Bandara Dabo Singkep (UPBU Kelas III Dabo Singkep - Kepulauan Riau)** yang dilayani oleh armada perintis **Susi Air (Cessna 208B Grand Caravan, kapasitas 12 kursi)**.
