@@ -1,0 +1,32 @@
+Baris mentah: 1933
+Catatan 'no flight' (hari tanpa penerbangan): 103 hari (tanggal asli di kolom tgl_act; kolom tgl_sch berisi placeholder 01-10-2026)
+Baris penerbangan: 1830
+Duplikat dihapus: 1 baris (kunci: tanggal, jam jadwal, no penerbangan, rute, penumpang, bagasi)
+Kode bandara 'Dabo ( SIQ / Singkep ) ai' diseragamkan jadi SIQ: 1 baris
+Nama operator diseragamkan (Susi Air / Wings Abadi); varian salah ketik: 3 baris
+Tipe pesawat diseragamkan (C208B / ATR72-500 / ATR72-600); varian tulisan lain: 18 baris
+Label tipe pesawat dikoreksi: 1 baris berkursi 72 yang tertulis C208B diubah menjadi ATR72 (tipe diambil dari registrasi yang sama)
+Keterlambatan (menit) = jam aktual - jam jadwal. Terdapat 36 baris dengan selisih < -180 menit (mis. jadwal 11:10, aktual 02:40) dan 1 baris > +720 menit; diduga salah ketik AM/PM, dikoreksi +/-12 jam (nilai asli disimpan di delay_menit_mentah; penanda delay_dikoreksi=1)
+Setelah koreksi, delay negatif (lebih awal) tersisa: 190 baris, dibiarkan apa adanya
+Penumpang transit semuanya 0 -> kolom transit dibuang; kolom pos (semua 0) dan tipe_rute (semua DOMESTIK) dibuang
+Rute utama yang dipertahankan: BTH, PKU, DJB, TNJ, TJB
+Penerbangan rute insidental dihapus: 9 baris (rute dengan < 10 penerbangan total)
+Baris penerbangan bersih (hanya rute utama): 1820
+Penumpang berkursi (dewasa+anak) melebihi kapasitas kursi pada 2 baris (diduga salah input, tidak diubah): 06-04-2025 PKU Datang (14/12), 21-12-2025 BTH Datang (13/12)
+Hari kalender 2025-01-01..2026-08-31: 608; ada penerbangan: 453; no flight tercatat: 103; tidak ada catatan sama sekali: 52
+Tanggal tak tercatat (kecuali Jan 2026): 01-01-2025, 04-01-2025, 08-01-2025, 14-01-2025, 29-01-2025, 12-02-2025, 15-02-2025, 26-11-2025, 20-12-2025, 24-12-2025, 27-12-2025, 31-12-2025, 01-02-2026, 04-02-2026, 07-02-2026, 11-02-2026, 14-02-2026, 18-02-2026, 21-02-2026, 25-02-2026, 28-02-2026, 07-03-2026
+Minggu penuh: 86; minggu yang menyentuh Januari 2026: 5. Januari 2026 hanya memuat 3 penerbangan (dikonfirmasi benar adanya, bukan data hilang) sehingga bukan kondisi operasi normal; minggu-minggu ini dikeluarkan dari data model (NaN)
+
+============================================================
+AGREGASI MINGGUAN PER RUTE (5 rute utama)
+============================================================
+  Rute SIQ<->BTH: 81 minggu, rata-rata 65.9 penumpang/minggu, min 28, max 200
+  Rute SIQ<->DJB: 81 minggu, rata-rata 39.6 penumpang/minggu, min 13, max 73
+  Rute SIQ<->PKU: 81 minggu, rata-rata 42.6 penumpang/minggu, min 16, max 64
+  Rute SIQ<->TJB: 81 minggu, rata-rata 30.2 penumpang/minggu, min 2, max 73
+  Rute SIQ<->TNJ: 81 minggu, rata-rata 39.5 penumpang/minggu, min 8, max 62
+Total baris data_mingguan_per_rute.csv: 405 (81 minggu × 5 rute)
+
+Statistik ringkas per rute disimpan ke statistik_ringkas.csv
+
+Rentang minggu: 2025-01-06 s/d 2026-08-24

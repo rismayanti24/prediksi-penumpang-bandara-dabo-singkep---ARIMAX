@@ -1,0 +1,746 @@
+=== PAGE 1 ===
+1
+RENCANA PEMBELAJARAN SEMESTER
+MATAKULIAH :PENAMBANGANDATA
+KODEMATAKULIAH :INF11121
+SEMESTER :V
+
+=== PAGE 2 ===
+2
+UNIVERSITAS MARITIM RAJA ALI HAJI
+FAKULTAS TEKNIK DAN TEKNOLOGI
+KEMARITIMAN
+PROGRAM STUDI TEKNIK INFORMATIKA
+RIF-11121
+RENCANA PEMBELAJARAN SEMESTER
+MATA KULIAH KODE RUMPUN MATA
+KULIAH
+SIFAT MATA
+KULIAH
+BOBOT
+(SKS) SEMESTER TANGGAL
+PENYUSUNAN
+Penambangan Data INF11121 Mata Kuliah Prodi Wajib 3 V 21 Agustus 2026
+OTORISASI /
+PENGESAHAN
+PROGRAM STUDI
+TEKNIK
+INFORMATIKA
+DOSEN PENGEMBANG RPS DOSEN PENGAMPU MATA
+KULIAH KOORDINATOR PRODII
+1.TekadMatulatan,S.Sos,S.Kom,
+M.Info.Tech
+2.MuhamadFadli,S.Kom,M.Kom
+1. TekadMatulatan,S.Sos,S.Kom,
+M.Info.Tech
+2. MuhamadFadli,S.Kom.M.Kom
+Feri Irawan,S.Kom, M.Kom
+
+=== PAGE 3 ===
+3
+Capaian Pembelajaran
+Lulusan (CPL)
+Kode CPL sesuai
+kurikulum OBE
+Prodi
+CPL-PRODI yang dibebankan pada Mata Kuliah Penambangan Data
+CPL04 Mampumerancangdanmengembangkansolusipermasalahankomputasicerdasataukeamanansiberdengan
+menerapkanteknikvisualisasiataualgoritmaataumanajemendata
+Capaian
+Pembelajaran Mata
+Kuliah (CPMK)
+CPMK041
+Mampumerancangsolusipermasalahankomputasicerdasataukeamanansiberdenganmenerapkanteknik
+visualisasiataualgoritmaataumanajemendatauntukmenyelesaikanmasalah
+CPMK042
+Mampumengembangkansolusipermasalahankomputasicerdasataukeamanansiberdenganmenerapkan
+teknikvisualisasiataualgoritmaataumanajemendatauntukmenyelesaikanmasalah
+Matrik CPMK
+terhadap CPL CPL04
+CPMK041 50
+CPMK042 50
+DESKRIPSI
+SINGKAT MATA
+KULIAH
+Matakuliah ini menekankan kepada ketrampilan mahasiswa dalam kemampuan memahami kebutuhan analisa data, kondisi data
+dan mempersiapkan data serta menganalisa data dengan menerapkan proses dan teknik yang tepat sesuai kaidah penambangan
+data,menuangkandalambentuklaporanterstruktur.
+Sub Capaian Pembelajaran Mata Kuliah (Sub CPMK)
+SubCPMK0421 Mampumenyelesaikanmasalahpenambangandatamelaluiproyeksecaratim
+SubCPMK0411 Mampumengindentifikasipermasalahandankebutuhandata
+SubCPMK0412 Mampumengenalidanmenanganipermasalahankualitasdata
+SubCPMK0413 Mampumengevaluasidanmenginterprestasikanhasiltemuanmodel
+SubCPMK0414 Mampumengidentifikasidanmenerapkanpenyelesaianmasalahasosiasi
+SubCPMK0415 Mampumengidentifikasidanmenerapkanpenyelesaianmasalahprediksi
+SubCPMK0416 Mampumengidentifikasidanmenerapkanpenyelesaianmasalahpengelompokkan
+=== PAGE 4 ===
+4
+BAHAN KAJIAN
+DAN MATERI
+PEMBELAJARAN
+Bahan Kajian:1.BK08- Data Management
+Materi:
+1. Konsep data science lifecycle: business understanding, data understanding, data preparation, modeling, evaluation,
+deployment,dan user acceptance
+2. StandarindustriCRISP
+3. Pemahamanmasalah
+4. Pemahamandata,permasalahan,pengumpulandata,eksplorasidanvisualisasidata
+5. Pre-prosesdata
+6. Teknikpemodelandata:Asosiasi,korelasi,klasifikasi,prediksi,kluster,deteksianomaly
+7. Teknikvalidasidanteknikpengukuranakurasi
+8. Representasihasil
+Keterkaitan MK
+dengan Sustainable
+Development Goals
+(SDGs)
+MatakuliahiniberkontribusipadapencapaianSDGs,khususnya:
+1.SDG4:QualityEducation
+PUSTAKA Utama:
+ PanNingTan,IntroductiontoDataMining,AddisonWesley,2016
+Pendukung:
+ HanJiaWei,DataMining:ConceptsandTechniques,MorganKaufman,2000
+MATA KULIAH
+SYARAT
+Aljabarlinear,Calculus,MatematikaDiskrit,StatistikdanProbabilitas,GrafikaKomputer,SistemBasisData
+MEDIA
+PEMBELAJARAN
+PerangkatLunak
+ VisualCode
+ Python/Julia
+ MicrosoftExcel
+ MATLAB
+ RapidMiner
+ YouTubevideo
+PerangkatKeras
+ LaptopatauPC
+=== PAGE 5 ===
+5
+A. RANCANGAN PEMBELAJARAN
+Minggu
+ke
+KemampuanAkhiryangdi
+harapkan(Sub-CPMK) IndikatorPencapaian MateriPerkuliahan/Pokok
+Bahasan ModelPembelajaran/Sintaks
+KegiatanPembelajaran KriteriaPenilaian Alokasi
+WaktuLuring Daring Blended Teknikdan
+Kriteria Bobot
+1
+(SubCPMK0411)
+Mampu
+mengindentifikasi
+permasalahandan
+kebutuhandata
+Mahasiswamampu
+menjelaskanulangdengan
+kalimatsendiriapaitu
+datamining
+Mahasiswamampu
+membedakankegiatan
+dataminingdengan
+kegiatanlainnya
+■KontrakPerkuliahan
+■RPSdanSistemPenilaian
+■SistemTeamBase
+Project
+Bahanbacaan:
+Utama[1]bab1
+Pendukung[1]bab1
+ContextualLearning
+- Pembahasankontrakkuliah
+- PenjelasanRPSdansistem
+penilaian
+- Penjelasanprojectyang
+dilakukan,faseprojectdan
+deadlinepembentukantimdan
+deadlinetiapfase
+- Penutup:TanyaJawab
+Kuliah
+Nontes:
+Tanya
+jawab
+secara
+sampling
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+2
+Mahasiswamampu
+mengenalikarakteristik
+databesertatindakanyang
+berkesesuaian
+■PengertiandanKonsep
+PenambanganData
+■CRISP-Pemahaman
+Tujuan/ Business
+Understanding
+Bahanbacaan:
+Utama[1]bab2,3
+Pendukung[1]bab2
+ContextualLearning:
+-Penjelasanformatproposaldan
+faseproject,formatlaporan
+akhir
+-MateriPengenalanterhadap
+penambangandata,
+-MateriPengenalanterhadap
+penambangandata,
+-PenjelasanmengenaiCRISP
+- PemahamantentangBusiness
+Understanding
+Kuliah Youtube
+video
+Masuk
+dalamUTS
+danUAS
+5
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+3
+■CRISP-Pemahaman
+Data Understanding
+■ AnalisisKebutuhandata
+danTeknikPengumpulan
+data
+■ Data,jenisdan
+karakteristik
+- PemahamantentangData
+Understanding
+- Materianalisiskebutuhandata
+danteknikpengumpulandata
+- Penjelasantentangdata,jenis
+datadankarakteristikdata
+Kuliah Youtube
+video
+Masuk
+dalamUTS
+danUAS
+5
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+4 ■ Fase1Project-Proposal
+ProjectdanPresentasi
+TeamBaseProject
+-Presentasiproposaltiaptim
+Seminar
+Proposal
+Project
+Rubrik
+Project 12,5
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+=== PAGE 6 ===
+6
+Minggu
+ke
+KemampuanAkhiryangdi
+harapkan(Sub-CPMK) IndikatorPencapaian MateriPerkuliahan/Pokok
+Bahasan ModelPembelajaran/Sintaks
+KegiatanPembelajaran KriteriaPenilaian Alokasi
+WaktuLuring Daring Blended Teknikdan
+Kriteria Bobot
+5
+(SubCPMK0411)
+Mampumengenalidan
+menanganipermasalahan
+kualitasdata
+■ DataDeskriptif(EDA)
+daneksplorasidata
+■ PermasalahanData
+■ Metodepra-prosesdata,
+datacleaning,pruning,
+adding
+■ Overfitting,Underfitting,
+bias,
+Self-DirectedLearning
+-PembahsaanMateriteknik
+eksplorasidatamelaluistatistik
+dankakaspengolahdata
+-Memahamikondisidatamelalui
+teknikvisualisasidata
+-Menjelaskanpermasalahanyang
+dapatditemukandalamdata
+Kuliah Youtube
+video
+Masuk
+dalamUTS
+danUAS
+5
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+6
+Self-DirectedLearning
+-PembahasanTeknikmenangani
+permasalahandatatersebutdata
+cleaning,dimensionlityreduction,
+featureextraction,one-hot-
+encoding,dataimputation,
+pruning,adding
+-Kondisioverfittingdan
+underfitting,biasdanvarians
+Kuliah Youtube
+video
+Masuk
+dalamUTS
+danUAS
+5
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+7
+Mahasiswamampu
+mengenaliberbagai
+bentukvisualisasidan
+fungsinya
+■ Visualisasi
+Bahanbacaan:
+Utama[1]bab6,12
+Self-DirectedLearning
+MenjelaskanTeknik,bentukdan
+maksuddariberbagaicara
+visualisasi
+Menjelaskanhubunganvisualisasi
+dalamprosesdatamining
+Kuliah Youtube
+video
+Masuk
+dalamUTS
+danUAS
+5
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+8 Ujian Tengah Semester
+WrittenExamMultipleChoice
+Online
+-Loginkesistemujianpada
+waktuyangditentukan
+-Jawabsoalhinggawaktuselesai
+-Selesaidankeluardarisistem
+TBA Tes:
+Tertulis 15
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+9
+(SubCPMK0411)
+Mampumengenalidan
+menanganipermasalahan
+kualitasdata
+■ DataSelection
+■ DataTransformation
+Self-DirectedLearning
+-Menjelaskantentangpemilihan
+data
+-Tekniktransformasidata:data
+smoothing,attribution
+construction,datageneralization,
+dataaggregation,data
+discretization,datanormalization
+Kuliahl Youtube
+video
+Masuk
+dalam
+UAS
+3
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+=== PAGE 7 ===
+7
+Minggu
+ke
+KemampuanAkhiryangdi
+harapkan(Sub-CPMK) IndikatorPencapaian MateriPerkuliahan/Pokok
+Bahasan ModelPembelajaran/Sintaks
+KegiatanPembelajaran KriteriaPenilaian Alokasi
+WaktuLuring Daring Blended Teknikdan
+Kriteria Bobot
+10
+(SubCPMK0415)Mampu
+mengidentifikasidan
+menerapkan
+penyelesaianmasalah
+prediksi
+Mahasiswamampu
+menerapkanklasifikasi
+melaluiPohonKeputusan,
+NaïveBayesbeserta
+pengukurannya
+Mahasiswamampu
+menerapkanteknik
+prediksidenganregresi
+dantekniklainnya
+■ TeknikKlasifikasi
+(DecissionTree,SVM,
+NaïveBayes,regression,
+NeuralNetwork)
+■ Hunt,ID3,C4.5,CART
+■ SVM
+■ NaïveBayes
+■ LinearRegression
+■ NeuralNetwork
+■ TeknikforecastPrediksi
+timeseriesmodel,
+regression,ARIMA,
+Neural Network,
+XGBoost,Gradient
+Boost,Prophet)
+Bahanbacaan:
+Utama[1]bab2,10
+Pendukung[1]bab3
+Self-DirectedLearning
+-Menjelaskantentangteknik
+classificationdenganpohon
+keputusanHunt,ID3,C4,5,
+CARTdanNaïveBayes
+-Menjelaskantentangteknik
+prediksi:regresi,ARIMAdan
+neuralnetwork,danbeberapa
+tekniklainnya)
+Kuliah Youtube
+video
+Masuk
+dalam
+UAS
+3
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+11
+(SubCPMK0416)
+Mampumengidentifikasi
+danmenerapkan
+penyelesaianmasalah
+pengelompokkan
+Mahasiswamampu
+menerapkankluster
+■ TeknikL1,L2danL3
+■ Jenisclusteranalysis
+Bahanbacaan:
+Utama[1]bab5,6
+Pendukung[1]bab7
+ContextualLearning:
+-Penjelasantentang tekniklinear
+regresidanSVM
+-Menjelaskantentangteknik
+cluster:HierarchicaldanPartition
+Kuliah Youtube
+video
+Masuk
+dalam
+UAS
+3
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+12
+(SubCPMK0414)Mampu
+mengidentifikasidan
+menerapkan
+penyelesaianmasalah
+asosiasi
+Mahasiswamampu
+melakukananalisaasosiasi
+ataukeranjangpasar
+besertapengukurannya
+■AssociationRule:
+Apriori,Fp-growth,
+Eclat,OPUS
+■Support,Confidence,
+Lift,Conviction,
+Leverage
+Bahanbacaan:
+Utama[1]bab5,6
+Pendukung[1]bab7
+ContextualLearning:
+-Penjelasantentangmarketbasket
+analisisdanteknikasosiasi
+denganbeberapacara
+-Penjelasantentang teknik
+pengukurandalamteknikasosiasi
+Kuliah Youtube
+video
+Masuk
+dalam
+UAS
+3
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+13
+(SubCPMK0413)Mampu
+mengevaluasidan
+menginterprestasikan
+hasiltemuanmodel
+Mahasiswamampu
+mengukurhasil
+penambangandatadan
+interprestasihasil
+■ Pengukurantraining
+error,validationerror,
+testerror
+Self-DirectedLearning:
+-Menjelaskanteknikpengukuran
+akurasiyangberkesesuaian
+sepertiSilhouette,DunnIndex,
+Dave-BouldinIndex,Calinsky-
+Kuliah Youtube
+video
+Masuk
+dalam
+UAS
+3
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+=== PAGE 8 ===
+8
+Minggu
+ke
+KemampuanAkhiryangdi
+harapkan(Sub-CPMK) IndikatorPencapaian MateriPerkuliahan/Pokok
+Bahasan ModelPembelajaran/Sintaks
+KegiatanPembelajaran KriteriaPenilaian Alokasi
+WaktuLuring Daring Blended Teknikdan
+Kriteria Bobot
+HarabaszIndex
+-Menjelaskanteknikpengukuran
+akurasiyangberkesesuaian
+sepertiMSE,MAE,RMS,R2,
+MAD,MAPE,sMAPE,MASE
+-Menjelaskanteknikpengukuran
+akurasiyangberkesesuaian
+sepertiF-Score,Accuracy,Recall,
+Precission,ROC
+14 (SubCPMK0421)
+Mampumenyelesaikan
+masalahpenambangan
+datamelaluiproyek
+secaratim
+Mahasiswamampu
+menyelesaikanproject
+secaraberkelompokdan
+mempresentasikanhasil
+temuansecaraoral
+Mahasiswamampu
+menuliskanseluruhproses
+projectkedalamlaporan
+terstruktur
+TeamBaseProject
+-Pengumpulanlaporanfisik
+sesuaiformat
+-Presentasihasilproject
+Seminar
+Project
+Seminar
+Project
+Rubrik
+Project 27,5
+TM:300
+menit
+BM:360
+menit
+PT:360
+menit
+15
+16 Ujian Akhir Semester
+WrittenExamMultipleChoice
+Online
+-Loginkesistemujianpada
+waktuyangditentukan
+-Jawabsoalhinggawaktuselesai
+-Selesaidankeluardarisistem
+TBA Tertulis 25
+TM:150
+menit
+BM:180
+menit
+PT:180
+menit
+Total jampembelajaran persemester 135j
+=== PAGE 9 ===
+9
+Catatan:
+Konteks Penjelasan
+Capaian Pembelajaran Lulusan PRODI
+(CPL-PRODI)
+adalah kemampuan yang dimiliki oleh setiap lulusan PRODI yang merupakan internalisasi dari sikap, penguasaan
+pengetahuandanketrampilansesuaidenganjenjangprodinyayangdiperolehmelaluiprosespembelajaran.
+CPL yang dibebankan pada mata kuliah adalah beberapa capaian pembelajaran lulusan program studi (CPL-PRODI) yang
+digunakan untuk pembentukan/pengembangan sebuah matakuliah yang terdiri dari aspek sikap, ketrampilan umum,
+ketrampilankhususdanpengetahuan.
+Capaian Pembelajaran Matakuliah
+(CPMK)
+adalahkemampuanyangdijabarkansecaraspesifikdariCPLyangdibebankanpadamatakuliah,danbersifatspesifikterhadap
+bahankajianataumateripembelajaranmatakuliahtersebut.
+Sub Capaian Pembelajaran Matakuliah
+(Sub-CPMK)
+adalahkemampuan yang dijabarkan secaraspesifik dariCPMK yang dapat diukuratau diamati dan merupakan kemampuan
+akhir yang direncanakan pada tiap tahap pembelajaran, dan bersifat spesifik terhadap materi pembelajaran matakuliah
+tersebut.
+Indikator Pencapaian Indikatorpenilaiankemampuandalamprosesmaupunhasilbelajarmahasiswaadalah pernyataan spesifik dan terukuryang
+mengidentifikasikemampuanataukinerjahasilbelajarmahasiswayangdisertai bukti-bukti.
+Materi Perkuliahan / Pokok Bahasan adalahrincianatauuraiandaribahankajianygdapatdisajikandalambentukbeberapapokokdansub-pokokbahasan.
+Model Pembelajaran / Sintaks  CaseBasedMethod(CBM)
+ TeamBasedProject(TBP)
+ ContextualLearning
+ DiscoveryLearning
+Kegiatan Pembelajaran Baikberbentuk luring, daring maupun blended,kegiatan pembelajaran dapatberupaKuliah, Responsi, Tutorial, Seminar atau
+yang setara, Praktikum, Praktik Studio, Praktik Bengkel, Praktik Lapangan, Penelitian, Pengabdian Kepada Masyarakat
+dan/ataubentukpembelajaranlainyangsetara.
+Kuliah,Responsi,Tutorial
+ 1sks=45jam/semester
+Praktikum, Praktik Studio, Praktik Bengkel, Praktik Lapangan, Penelitian, Pengabdian Kepada Masyarakat dan/atau bentuk
+pembelajaranlainyangsetara.
+ 1sks=170menit/minggu/semester
+Kriteria Penilaian Kriteria Penilaian adalah patokan yang digunakan sebagai ukuran atau tolak ukur ketercapaian pembelajaran dalam penilaian
+berdasarkan indikator-yang telah ditetapkan. Kriteria penilaian merupakan pedoman bagi penilai agar penilaian konsisten dan
+tidakbias.Kriteriadapatberupakuantitatifataupunkualitatif.
+Bentukpenilaian:tesdannon-tes.
+=== PAGE 10 ===
+10
+B. RUBRIK PENILAIAN
+No KomponenPenilaian BobotPenilaian
+(%)
+1 AktifitasPartisipatif (AP) 0
+2 TeamBasedProject(TBP) 50
+2 Kognitif/
+Pengetahuan
+Tugas(T) 10
+3 Quiz(Q) 0
+4 UTS 15
+5 UAS 25
+Total 100
+  =  ∗ 50 +  ∗ 10 +  ∗ 15 + ( ∗ 25)
+100
+No CPMK Aktifitas
+Partisipatif
+TeamBased
+Project
+Tugas Quiz UTS UAS
+1 CPMK0411 0 10 15 25 50
+2 CPMK0421 0 50 50
+Total 0 50 10 15 25 100
+0411 = ( ∗ 10) + ( ∗ 15) + ( ∗ 25)
+50
+0421 = (   ∗ 50)
+50
+=== PAGE 11 ===
+11
+C. BASIS EVALUASI PENILAIAN KOGNITIF
+a. Tugas
+No KomponenPenilaian Tidak
+terpenuhi
+seluruhnya
+Terpenuhi
+sebagian
+Terpenuhi
+1 Mengumpulkantugasdanmengikutitataaturantugas(permateri)80% -10 +40 +100
+2 Mentaatibataswaktu 0 0 x1
+3 TidakmemuatPlagiasi(permateri) x0 n/a x1
+ = (  
+ ∗ 100%)
+b. Ujian Tengah Semester
+No KomponenPenilaian Pointper-daftar
+1 Pilihanjawabanbenar(multiplechoice) 2-5-10
+2 Pilihanjawabantidakbenaratausebagianbenar(multiplechoice) 0
+c. Ujian Akhir Semester
+No KomponenPenilaian Pointper-daftar
+1 Pilihanjawabanbenar(multiplechoice) 2-5-10
+2 Pilihanjawabantidakbenaratausebagianbenar(multiplechoice) 0
+D. BASIS EVALUASI PENILAIAN TEAM BASED PROJECT
+a. TAHAP PROPOSAL
+No KomponenPenilaian Tidak
+terpenuhi
+Terpenuhi
+Sebagian
+Terpenuhi
+1 Proposalmemilikimasalahrealdandiungkapkandenganbaik +5 +5 +30
+2 Proposalmengajukansolusiyangmasukakaldanberkaitandenganmasalahrealbaiklangsungmaupuntidaklangsung +10 +10 +50
+4 Mengikutiaturanprojectbaiksegitengatwaktumaupunaturanlainnya +5 +15 +20
+Total 30 100
+=== PAGE 12 ===
+12
+b. LAPORAN AKHIR
+No KomponenPenilaian Tidak
+terpenuhi
+Terpenuhi
+Sebagian
+Terpenuhi
+1 Mampumenjabarkanjenisdatayangdiperoleh +0 +2.5 +5
+2 Mampumenguraikankondisidatadenganvisualisasi +2.5 +10 +15
+3 Mampumenguraikankondisidatadenganstatistik +2.5 +10 +15
+4 Mampumendeteksipermasalahandatadantindakanpenanganannya +2.5 +5 +7.5
+5 Mampumelakukantindakanpre-proseslainnyasepertitransformasi,seleksidanlainlain +2.5 +5 +7.5
+6 Projectdiselesaikandengantuntas,sesuaiaturandandalamkurunwaktuyangdiberikan +0 +2.5 +5
+7 Produkaplikasiyangdihasilkanmemenuhikebutuhan +2.5 +5 +10
+8 Memberikansolusiyangpalingmendekatisolusiideal(Solusiyangtidakmemberikanpenyelesaian,tetapmendapatnilaikarena effort
+dihargai)
++0.5 +7.5 +15
+9 Laporanakhirmampumenguraikansolusisecarastep-by-stepataudetailpemikiran.(Uraianyangloncatloncatmendapatnilaikarena
+effortdihargai)
++2.0 +5 +10
+10 Presentasiakhirdanlaporanakhirmampumemberikanargumentasiataualasankenapamemilihsolusitersebutyanglogisdandapat
+diterimanalar.(Argumentasiasalasalanmendapatnilai0karenadianggaptidakada effort)
++0 +5 +10
+Total 15 50 100
+ =  ∗ 25% + (ℎ ∗ 75%)
+=== PAGE 13 ===
+13
+E. PENGESAHAN RPS
+Dosen Pengembang RPS,
+Menyetujui,
+Koordinator.Prodi S-1 Teknik Informatika
+Fakultas Teknik dan Teknologi Kemaritiman
+Universitas Maritim Raja Ali Haji
+Tekad Matulatan, S.Sos,
+S.Kom, M.Inf.Tech
+Muhamad Fadli, S.Kom,
+M.Kom Feri Irawan, S.Kom., M.Kom
+Penelaah
+Septia Refly,S.Pd.,M.Si
+Gugus Penjaminan Mutu
+Fakultas Teknik dan Teknologi Kemaritiman

@@ -1,0 +1,6 @@
+rute,minggu,penumpang_mean,penumpang_std,penumpang_min,penumpang_max,penerbangan_mean,penerbangan_std
+BTH,81,65.88,28.36,28,200,5.72,1.62
+DJB,81,39.63,10.13,13,73,4.14,0.65
+PKU,81,42.59,8.55,16,64,4.16,0.75
+TJB,81,30.17,12.97,2,73,4.07,0.74
+TNJ,81,39.53,7.86,8,62,4.04,0.46

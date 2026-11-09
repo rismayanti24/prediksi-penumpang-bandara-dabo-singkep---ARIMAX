@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Prediksi & Analitik Penumpang per Rute - Bandara Dabo Singkep</title>
+    <meta name="description" content="Dashboard Prediksi Penumpang per Rute dan Analisis Data Bandara Dabo Singkep berbasis Model ARIMAX dengan Variabel Eksogen Lebaran">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        /* ============================================================
+           PALET WARNA: MODERN AEROSPACE SLATE & LUMINOUS SKY BLUE
+           ============================================================ */
+        :root {
+            --bg-base:        #0f172a;
+            --bg-body:        #131f37;
+            --bg-sidebar:     #0b1325;
+            --bg-card:        #182642;
+            --bg-card-sub:    #1f3357;
+            --bg-card-hover:  #253e6b;
+            
+            --border:         rgba(56, 189, 248, 0.22);
+            --border-light:   rgba(255, 255, 255, 0.08);
+            --border-focus:   #38bdf8;
+            
+            --text-main:      #f8fafc;
+            --text-title:     #ffffff;
+            --text-sub:       #cbd5e1;
+            --text-dim:       #94a3b8;
+            
+            --primary:        #0284c7;
+            --primary-light:  #38bdf8;
+            --primary-glow:   rgba(56, 189, 248, 0.16);
+            
+            --hijau:          #10b981;
+            --hijau-light:    #34d399;
+            --hijau-bg:       rgba(16, 185, 129, 0.14);
+            
+            --kuning:         #f59e0b;
+            --kuning-light:   #fbbf24;
+            --kuning-bg:      rgba(245, 158, 11, 0.14);
+            
+            --biru:           #38bdf8;
+            --biru-bg:        rgba(56, 189, 248, 0.14);
+            
+            --ungu:           #818cf8;
+            --ungu-bg:        rgba(129, 140, 248, 0.14);
+            
+            --radius-lg:      16px;
+            --radius:         12px;
+            --radius-sm:      8px;
+            --shadow-card:    0 6px 20px -2px rgba(0, 0, 0, 0.35);
+            --shadow-hover:   0 12px 28px -4px rgba(56, 189, 248, 0.2);
+            --transisi:       all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+            background: var(--bg-body);
+            background-image: 
+                radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.09) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%);
+            color: var(--text-main);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* ANIMASI */
+        @keyframes radarPulse {
+            0%   { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70%  { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        @keyframes floatAirplane {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50%      { transform: translateY(-3px) rotate(2deg); }
+        }
+
+        /* SIDEBAR KIRI */
+        .sidebar {
+            width: 235px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 20px 14px;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            border: 1px solid var(--primary-light);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+            animation: floatAirplane 4s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .brand-text h2 {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: var(--text-title);
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+
+        .brand-text p {
+            font-size: 10px;
+            color: var(--primary-light);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .sidebar-status {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 10px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot-ping {
+            width: 7px;
+            height: 7px;
+            background: var(--hijau);
+            border-radius: 50%;
+            animation: radarPulse 2s infinite;
+            flex-shrink: 0;
+        }
+
+        .status-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-sub);
+        }
+
+        .status-val {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--hijau-light);
+            display: block;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+        }
+
+        .menu-header {
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--text-dim);
+            letter-spacing: 0.8px;
+            padding: 6px 10px 2px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-sub);
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transisi);
+            text-align: left;
+            width: 100%;
+        }
+
+        .nav-btn:hover {
+            background: var(--bg-card);
+            color: #ffffff;
+            border-color: var(--border-light);
+        }
+
+        .nav-btn.aktif {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+            border-color: var(--primary-light);
+        }
+
+        .sidebar-footer {
+            padding-top: 14px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .card-model-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+        }
+
+        .model-info-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 3px;
+        }
+
+        .model-info-desc {
+            font-size: 10.5px;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+
+        /* KONTEN UTAMA */
+        .konten-utama {
+            margin-left: 235px;
+            flex: 1;
+            padding: 22px 28px 50px;
+            max-width: 1550px;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .topbar-kiri h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-title);
+            letter-spacing: -0.3px;
+        }
+
+        .topbar-kiri p {
+            font-size: 12.5px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        .topbar-kanan {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-info-top {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-sub);
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-info-top i { color: var(--primary-light); }
+
+        /* ============================================================
+           BAR PEMILIH RUTE (ROUTE SELECTOR)
+           ============================================================ */
+        .bar-pemilih-rute {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow-card);
+        }
+
+        .rute-label-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .pills-rute {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .pill-rute {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-light);
+            color: var(--text-sub);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transisi);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pill-rute:hover {
+            border-color: var(--primary-light);
+            color: #ffffff;
+            background: var(--bg-card-hover);
+        }
+
+        .pill-rute.aktif {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            border-color: var(--primary-light);
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(2, 132, 199, 0.45);
+        }
+
+        .pill-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--hijau-light);
+        }
+
+        .rute-aktif-badge {
+            background: var(--biru-bg);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--primary-light);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 4 KARTU STATISTIK ATAS */
+        .grid-kartu-atas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .kartu-angka {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            box-shadow: var(--shadow-card);
+            transition: var(--transisi);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .kartu-angka:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .kartu-atas-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .kartu-label {
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+        }
+
+        .kartu-icon-wrap {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-sm);
+            background: var(--primary-glow);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-light);
+        }
+
+        .kartu-nilai {
+            font-size: 27px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.1;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .kartu-keterangan {
+            font-size: 11px;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .kartu-angka.warna-kuning .kartu-icon-wrap { background: var(--kuning-bg); border-color: rgba(245, 158, 11, 0.3); color: var(--kuning-light); }
+        .kartu-angka.warna-hijau .kartu-icon-wrap  { background: var(--hijau-bg);  border-color: rgba(16, 185, 129, 0.3); color: var(--hijau-light); }
+        .kartu-angka.warna-ungu .kartu-icon-wrap   { background: var(--ungu-bg);   border-color: rgba(129, 140, 248, 0.3); color: var(--ungu); }
+
+        /* TAB PAGES */
+        .tab-halaman {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* WIDESCREEN CHART PANEL */
+        .panel-chart-widescreen {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 22px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .chart-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-toggle-axis {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-light);
+            color: var(--text-sub);
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transisi);
+        }
+
+        .btn-toggle-axis.aktif {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary-light);
+        }
+
+        /* GRID BAWAH */
+        .grid-bawah {
+            display: grid;
+            grid-template-columns: 430px 1fr;
+            gap: 18px;
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .panel-judul {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .panel-judul-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* INPUTS & CONTROLS */
+        .grup-input { margin-bottom: 14px; }
+        .label-input {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+        }
+
+        .pilihan-cepat {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .tombol-opsi {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-light);
+            color: var(--text-sub);
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 7px 8px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transisi);
+            text-align: center;
+        }
+
+        .tombol-opsi:hover {
+            border-color: var(--primary-light);
+            color: #ffffff;
+        }
+
+        .tombol-opsi.aktif {
+            background: var(--primary);
+            border-color: var(--primary-light);
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .tombol-utama {
+            width: 100%;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            border: 1px solid var(--primary-light);
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 700;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transisi);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+        }
+
+        .tombol-utama:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
+        }
+
+        /* KOTAK INFO */
+        .kotak-info {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-top: 14px;
+        }
+
+        .kotak-info.peringatan {
+            border-color: rgba(245, 158, 11, 0.4);
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .info-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .info-status.sukses { color: var(--hijau-light); }
+        .info-status.waspada { color: var(--kuning-light); }
+
+        .info-teks {
+            font-size: 11.5px;
+            color: var(--text-sub);
+            line-height: 1.45;
+        }
+
+        .tiga-kolom {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .kotak-mini {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 8px 10px;
+            text-align: center;
+        }
+
+        .mini-label {
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .mini-angka {
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-top: 2px;
+        }
+
+        /* TABEL */
+        .pembungkus-tabel {
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--bg-card-sub);
+            color: var(--text-dim);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 10.5px;
+            letter-spacing: 0.5px;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        tr:hover td {
+            background: var(--bg-card-hover);
+        }
+
+        tr.baris-aktif td {
+            background: rgba(56, 189, 248, 0.18) !important;
+            border-top: 1px solid var(--primary-light);
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+        .tag-lebaran {
+            background: var(--kuning-bg);
+            color: var(--kuning-light);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .tag-biasa {
+            background: var(--hijau-bg);
+            color: var(--hijau-light);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .tag-uji {
+            background: var(--ungu-bg);
+            color: var(--ungu);
+            border: 1px solid rgba(129, 140, 248, 0.35);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        /* GRID EDA */
+        .grid-eda-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .grid-eda-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .kartu-eda {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-card);
+        }
+
+        .badge-eda {
+            background: var(--biru-bg);
+            color: var(--biru);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 12px;
+        }
+
+        .eda-insight {
+            font-size: 11.5px;
+            color: var(--text-sub);
+            background: var(--bg-card-sub);
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            margin-top: 12px;
+            line-height: 1.45;
+        }
+
+        .input-cari-tabel {
+            width: 100%;
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            margin-bottom: 14px;
+            transition: var(--transisi);
+        }
+
+        .select-kotak {
+            width: 100%;
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .grid-bawah { grid-template-columns: 1fr; }
+            .grid-kartu-atas { grid-template-columns: repeat(2, 1fr); }
+            .grid-eda-2 { grid-template-columns: 1fr; }
+            .grid-eda-3 { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 850px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; height: auto; }
+            .konten-utama { margin-left: 0; padding: 16px; }
+            .grid-kartu-atas { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         1. SIDEBAR NAVIGASI KIRI
+         ============================================================ -->
+    <aside class="sidebar">
+        <!-- BRAND -->
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <i data-lucide="plane" style="width:22px;height:22px"></i>
+            </div>
+            <div class="brand-text">
+                <h2>UPBU Dabo Singkep</h2>
+                <p>Model ARIMAX per Rute</p>
+            </div>
+        </div>
+
+        <!-- STATUS LIVE SISTEM -->
+        <div class="sidebar-status">
+            <span class="status-dot-ping"></span>
+            <div>
+                <span class="status-label">Status Server:</span>
+                <span class="status-val">Online • 5 Rute Siap</span>
+            </div>
+        </div>
+
+        <!-- MENU TABS -->
+        <div class="sidebar-menu">
+            <div class="menu-header">Menu Analitik</div>
+            
+            <button class="nav-btn aktif" id="navBtnPrediksi" onclick="gantiHalaman('prediksi')">
+                <i data-lucide="trending-up" style="width:17px;height:17px"></i>
+                <span>Peramalan per Rute</span>
+            </button>
+
+            <button class="nav-btn" id="navBtnValidasi" onclick="gantiHalaman('validasi')">
+                <i data-lucide="check-circle-2" style="width:17px;height:17px"></i>
+                <span>Validasi Akurasi</span>
+            </button>
+
+            <button class="nav-btn" id="navBtnEda" onclick="gantiHalaman('eda')">
+                <i data-lucide="bar-chart-3" style="width:17px;height:17px"></i>
+                <span>Eksplorasi & Evaluasi</span>
+            </button>
+
+            <button class="nav-btn" id="navBtnExplorer" onclick="gantiHalaman('explorer')">
+                <i data-lucide="table" style="width:17px;height:17px"></i>
+                <span>Data Explorer</span>
+            </button>
+        </div>
+
+        <!-- FOOTER SIDEBAR -->
+        <div class="sidebar-footer">
+            <div class="card-model-info">
+                <div class="model-info-title">
+                    <i data-lucide="cpu" style="width:13px;height:13px"></i>
+                    <span id="sidebarInfoRute">Semua Rute (Agregat)</span>
+                </div>
+                <div class="model-info-desc" id="sidebarInfoDesc">
+                    Model ARIMAX + Lebaran.<br>
+                    Split: Latih 71% | Uji 29% (Lebaran 2026).
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============================================================
+         2. KONTEN UTAMA (KANAN)
+         ============================================================ -->
+    <main class="konten-utama">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-kiri">
+                <h1 id="judulHalamanAktif">Simulator Prediksi Penumpang per Rute & Kebutuhan Armada</h1>
+                <p id="subjudulHalamanAktif">Proyeksi deret waktu berbasis model ARIMAX dengan penanda musiman Lebaran per rute</p>
+            </div>
+            <div class="topbar-kanan">
+                <div class="badge-info-top">
+                    <i data-lucide="split" style="width:14px;height:14px"></i>
+                    <span>Split 70:30 (Uji Lebaran 2026)</span>
+                </div>
+                <div class="badge-info-top">
+                    <i data-lucide="plane-takeoff" style="width:14px;height:14px"></i>
+                    <span>Susi Air C208B (12 Kursi)</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ============================================================
+             BAR PEMILIH RUTE UTAMA (ROUTE SELECTOR INTERAKTIF)
+             ============================================================ -->
+        <section class="bar-pemilih-rute">
+            <div class="rute-label-group">
+                <i data-lucide="compass" style="width:16px;height:16px;color:var(--primary-light)"></i>
+                <span>Pilih Rute Analisis:</span>
+            </div>
+            <div class="pills-rute" id="kontainerPillsRute">
+                <button class="pill-rute aktif" id="pill-SEMUA" onclick="pilihRute('SEMUA')">
+                    <span class="pill-dot"></span>
+                    Semua Rute (Agregat)
+                </button>
+                <button class="pill-rute" id="pill-BTH" onclick="pilihRute('BTH')">
+                    SIQ ↔ Batam (BTH)
+                </button>
+                <button class="pill-rute" id="pill-PKU" onclick="pilihRute('PKU')">
+                    SIQ ↔ Pekanbaru (PKU)
+                </button>
+                <button class="pill-rute" id="pill-DJB" onclick="pilihRute('DJB')">
+                    SIQ ↔ Jambi (DJB)
+                </button>
+                <button class="pill-rute" id="pill-TNJ" onclick="pilihRute('TNJ')">
+                    SIQ ↔ Tanjungpinang (TNJ)
+                </button>
+                <button class="pill-rute" id="pill-TJB" onclick="pilihRute('TJB')">
+                    SIQ ↔ Karimun (TJB)
+                </button>
+            </div>
+            <div class="rute-aktif-badge" id="badgeRuteAktif">
+                <i data-lucide="map-pin" style="width:13px;height:13px"></i>
+                <span id="labelRuteAktif">Semua Rute (Agregat)</span>
+            </div>
+        </section>
+
+        <!-- 4 KARTU STATISTIK RINGKASAN ATAS -->
+        <section class="grid-kartu-atas">
+            <!-- KARTU 1: TOTAL PENUMPANG -->
+            <div class="kartu-angka">
+                <div class="kartu-atas-header">
+                    <span class="kartu-label">Total Penumpang</span>
+                    <div class="kartu-icon-wrap">
+                        <i data-lucide="users" style="width:15px;height:15px"></i>
+                    </div>
+                </div>
+                <div class="kartu-nilai" id="valTotal">--</div>
+                <div class="kartu-keterangan" id="ketTotal">
+                    <i data-lucide="history" style="width:12px;height:12px;color:var(--primary-light)"></i>
+                    <span id="ketTotalTeks">Periode Jan 2025 – Agu 2026</span>
+                </div>
+            </div>
+
+            <!-- KARTU 2: RATA-RATA MINGGUAN -->
+            <div class="kartu-angka warna-kuning">
+                <div class="kartu-atas-header">
+                    <span class="kartu-label">Rata-rata Mingguan</span>
+                    <div class="kartu-icon-wrap">
+                        <i data-lucide="scale" style="width:15px;height:15px"></i>
+                    </div>
+                </div>
+                <div class="kartu-nilai" id="valRata">--</div>
+                <div class="kartu-keterangan" id="ketRata">
+                    <i data-lucide="plane" style="width:12px;height:12px;color:var(--kuning-light)"></i>
+                    Penumpang/minggu pada rute ini
+                </div>
+            </div>
+
+            <!-- KARTU 3: AKURASI RATA-RATA -->
+            <div class="kartu-angka warna-hijau">
+                <div class="kartu-atas-header">
+                    <span class="kartu-label">Akurasi Model Uji</span>
+                    <div class="kartu-icon-wrap">
+                        <i data-lucide="shield-check" style="width:15px;height:15px"></i>
+                    </div>
+                </div>
+                <div class="kartu-nilai" style="color:var(--hijau-light);" id="valAkurasi">--</div>
+                <div class="kartu-keterangan" id="ketAkurasi">
+                    <i data-lucide="sparkles" style="width:12px;height:12px;color:var(--hijau-light)"></i>
+                    <span id="ketAkurasiTeks">Evaluasi pada periode uji Lebaran 2026</span>
+                </div>
+            </div>
+
+            <!-- KARTU 4: MODEL ORDE -->
+            <div class="kartu-angka warna-ungu">
+                <div class="kartu-atas-header">
+                    <span class="kartu-label">Orde Terpilih (AIC)</span>
+                    <div class="kartu-icon-wrap">
+                        <i data-lucide="git-branch" style="width:15px;height:15px"></i>
+                    </div>
+                </div>
+                <div class="kartu-nilai" style="font-size:22px;color:var(--biru);" id="valOrde">-</div>
+                <div class="kartu-keterangan" id="ketOrde">
+                    <i data-lucide="sparkle" style="width:12px;height:12px;color:var(--biru)"></i>
+                    MAE: -- | MAPE: --%
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             TAB 1: PERAMALAN (FORECASTING & SIMULATOR)
+             ======================================================== -->
+        <section id="halamanPrediksi" class="tab-halaman">
+            <!-- WIDESCREEN CHART -->
+            <div class="panel-chart-widescreen">
+                <div class="chart-toolbar">
+                    <div class="panel-judul-text">
+                        <i data-lucide="activity" style="width:18px;height:18px;color:var(--primary-light)"></i>
+                        <span id="judulGrafikUtama" style="font-size:15px;font-weight:700;color:#ffffff;">Grafik Tren Historis & Proyeksi Masa Depan (ARIMAX)</span>
+                    </div>
+                    <div class="toolbar-group">
+                        <span style="font-size:11px;color:var(--text-dim);margin-right:4px;">Format Sumbu X:</span>
+                        <button class="btn-toggle-axis aktif" id="btnAxisPredBulan" onclick="setModeSumbu('bulan')">Bulanan</button>
+                        <button class="btn-toggle-axis" id="btnAxisPredMinggu" onclick="setModeSumbu('minggu')">Tanggal Mingguan</button>
+                    </div>
+                </div>
+                <div style="height: 380px; position: relative;">
+                    <canvas id="grafikUtama"></canvas>
+                </div>
+            </div>
+
+            <!-- KONTROL SIMULATOR & TABEL RINCIAN -->
+            <div class="grid-bawah">
+                <!-- PANEL SIMULASI -->
+                <div class="panel">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="sliders" style="width:16px;height:16px;color:var(--primary-light)"></i>
+                            Kontrol Horizon Proyeksi
+                        </div>
+                        <span class="badge-eda" style="background:var(--hijau-bg);color:var(--hijau-light);border-color:rgba(16,185,129,0.3)">
+                            Proyeksi
+                        </span>
+                    </div>
+
+                    <div class="grup-input">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                            <label class="label-input" style="margin-bottom:0;">Pilih Jangka Waktu Prediksi:</label>
+                            <span id="labelHorizonAktif" style="font-size:12px;font-weight:700;color:var(--primary-light);">8 Minggu (~2 Bulan)</span>
+                        </div>
+                        <div class="pilihan-cepat">
+                            <button class="tombol-opsi" onclick="pilihHorizon(4)">1 Bulan (4 Mgg)</button>
+                            <button class="tombol-opsi aktif" onclick="pilihHorizon(8)">2 Bulan (8 Mgg)</button>
+                            <button class="tombol-opsi" onclick="pilihHorizon(12)">3 Bulan (12 Mgg)</button>
+                            <button class="tombol-opsi" onclick="pilihHorizon(26)">6 Bulan (26 Mgg)</button>
+                            <button class="tombol-opsi" onclick="pilihHorizon(52)">1 Tahun (52 Mgg)</button>
+                            <button class="tombol-opsi" onclick="pilihHorizon(104)">2 Tahun (104 Mgg)</button>
+                        </div>
+                        <div style="margin-top:10px;display:flex;align-items:center;gap:10px;background:var(--bg-card-sub);padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border-light);">
+                            <span style="font-size:11px;color:var(--text-dim);white-space:nowrap;">Slider Bebas:</span>
+                            <input type="range" id="sliderHorizon" min="1" max="104" value="8" style="flex:1;accent-color:var(--primary-light);cursor:pointer;" oninput="onSliderHorizon(this.value)">
+                            <span style="font-size:11.5px;color:var(--text-sub);white-space:nowrap;font-weight:700;"><span id="valSliderHorizon" style="color:#ffffff;">8</span> Mgg</span>
+                        </div>
+                    </div>
+
+                    <button class="tombol-utama" onclick="jalankanPrediksi()">
+                        <i data-lucide="sparkles" style="width:15px;height:15px"></i>
+                        Kalkulasi Ulang Prediksi Rute Ini
+                    </button>
+
+                    <!-- KESIMPULAN / ALERT -->
+                    <div class="kotak-info" id="kotakHasil">
+                        <div class="info-status sukses" id="statusHasil">
+                            <i data-lucide="check-circle" style="width:15px;height:15px"></i>
+                            Kapasitas Pesawat: Aman & Cukup
+                        </div>
+                        <div class="info-teks" id="teksHasil">
+                            Memuat kalkulasi deret waktu ARIMAX...
+                        </div>
+                    </div>
+
+                    <!-- 3 ANGKA RINGKAS -->
+                    <div class="tiga-kolom">
+                        <div class="kotak-mini">
+                            <div class="mini-label">Total Penumpang</div>
+                            <div class="mini-angka" id="angkaTotalPax">--</div>
+                        </div>
+                        <div class="kotak-mini">
+                            <div class="mini-label">Rata-rata/Mgg</div>
+                            <div class="mini-angka" id="angkaRataPax">--</div>
+                        </div>
+                        <div class="kotak-mini">
+                            <div class="mini-label">Kebutuhan Flight</div>
+                            <div class="mini-angka" id="angkaFlight" style="color:var(--primary-light);">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABEL HASIL MASA DEPAN -->
+                <div class="panel">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="list-checks" style="width:16px;height:16px;color:var(--hijau-light)"></i>
+                            Tabel Rincian Proyeksi Tiap Minggu
+                        </div>
+                        <span class="badge-eda" id="badgeKapasitasFlight">Cessna 208B (12 Kursi)</span>
+                    </div>
+
+                    <div class="pembungkus-tabel" style="max-height: 310px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Periode Minggu</th>
+                                    <th>Rentang Tanggal</th>
+                                    <th>Prediksi Penumpang</th>
+                                    <th>Rentang 95% CI</th>
+                                    <th>Kebutuhan Flight</th>
+                                    <th>Status Musiman</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelHasilPrediksi">
+                                <tr><td colspan="6" style="text-align:center;padding:16px;color:var(--text-dim);">Menghitung...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             TAB 2: VALIDASI AKURASI (DATA MASA LALU & UJI)
+             ======================================================== -->
+        <section id="halamanValidasi" class="tab-halaman" style="display: none;">
+            <!-- WIDESCREEN CHART -->
+            <div class="panel-chart-widescreen">
+                <div class="chart-toolbar">
+                    <div class="panel-judul-text">
+                        <i data-lucide="check-check" style="width:18px;height:18px;color:var(--biru)"></i>
+                        <span id="judulGrafikValidasi" style="font-size:15px;font-weight:700;color:#ffffff;">Grafik Validasi: Aktual vs Fitted (Latih) & Rolling Forecast (Uji Mulai Lebaran 2026)</span>
+                    </div>
+                    <div class="toolbar-group">
+                        <span class="badge-eda" style="background:var(--hijau-bg);color:var(--hijau-light);border-color:rgba(16,185,129,0.3);margin-right:6px;">Latih ~71%</span>
+                        <span class="badge-eda" style="background:var(--ungu-bg);color:var(--ungu);border-color:rgba(129,140,248,0.3);margin-right:8px;">Uji ~29% (Lebaran 2026)</span>
+                        <button class="btn-toggle-axis aktif" id="btnAxisValBulan" onclick="setModeSumbu('bulan')">Bulanan</button>
+                        <button class="btn-toggle-axis" id="btnAxisValMinggu" onclick="setModeSumbu('minggu')">Mingguan</button>
+                    </div>
+                </div>
+                <div style="height: 380px; position: relative;">
+                    <canvas id="grafikValidasi"></canvas>
+                </div>
+            </div>
+
+            <!-- DETAIL VALIDASI MINGGUAN -->
+            <div class="grid-bawah">
+                <!-- SPOTLIGHT MINGGU TERPILIH -->
+                <div class="panel">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="search" style="width:16px;height:16px;color:var(--biru)"></i>
+                            Pengecekan Minggu Pilihan
+                        </div>
+                        <span class="badge-eda" id="badgeMingguObservasi" style="background:var(--biru-bg);color:var(--biru)">Observasi Rute</span>
+                    </div>
+
+                    <div class="grup-input">
+                        <label class="label-input">Pilih Minggu dari Riwayat:</label>
+                        <select id="selectMingguLalu" class="select-kotak" onchange="pilihMingguHistoris(this.value)">
+                        </select>
+                        <div class="pilihan-cepat">
+                            <button class="tombol-opsi" onclick="pilihCepatHistoris('2025-01-20')">Jan 2025 (Mgg 3)</button>
+                            <button class="tombol-opsi" onclick="pilihCepatHistoris('2025-03-24')">Lebaran 2025 (Latih)</button>
+                            <button class="tombol-opsi" onclick="pilihCepatHistoris('2026-03-23')">Lebaran 2026 (Uji)</button>
+                            <button class="tombol-opsi" onclick="pilihCepatHistoris('2026-08-24')">Agu 2026 (Akhir)</button>
+                        </div>
+                    </div>
+
+                    <div class="kotak-info" style="border-color:var(--border);">
+                        <div style="font-size:13.5px;font-weight:700;color:#ffffff;margin-bottom:6px;" id="judulMingguTerpilih">
+                            --
+                        </div>
+                        <div class="tiga-kolom" style="margin-bottom:8px;">
+                            <div class="kotak-mini">
+                                <div class="mini-label">Penumpang Asli</div>
+                                <div class="mini-angka" style="color:var(--hijau-light);" id="angkaAsli">--</div>
+                            </div>
+                            <div class="kotak-mini">
+                                <div class="mini-label">Tebakan Model</div>
+                                <div class="mini-angka" style="color:var(--primary-light);" id="angkaTebakan">--</div>
+                            </div>
+                            <div class="kotak-mini">
+                                <div class="mini-label">Selisih Meleset</div>
+                                <div class="mini-angka" style="color:var(--kuning-light);" id="angkaMeleset">--</div>
+                            </div>
+                        </div>
+                        <div class="info-teks" id="catatanKeakuratan">
+                            Memuat data evaluasi...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABEL LENGKAP SEMUA MINGGU -->
+                <div class="panel">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="table-2" style="width:16px;height:16px;color:var(--hijau-light)"></i>
+                            Evaluasi Akurasi Observasi Mingguan
+                        </div>
+                        <span class="badge-eda">Klik Baris untuk Menyorot</span>
+                    </div>
+
+                    <div class="pembungkus-tabel" style="max-height: 310px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Periode Bulan</th>
+                                    <th>Rentang Tanggal</th>
+                                    <th>Tipe Data</th>
+                                    <th>Aktual</th>
+                                    <th>Tebakan Model</th>
+                                    <th>Selisih</th>
+                                    <th>Akurasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelMasaLaluBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             TAB 3: EKSPLORASI DATA & EVALUASI MODEL
+             ======================================================== -->
+        <section id="halamanEda" class="tab-halaman" style="display: none;">
+            <!-- TABEL EVALUASI PERBANDINGAN MODEL 5 RUTE (KETENTUAN TUGAS) -->
+            <div class="panel" style="margin-bottom: 4px;">
+                <div class="panel-judul">
+                    <div class="panel-judul-text">
+                        <i data-lucide="award" style="width:18px;height:18px;color:var(--primary-light)"></i>
+                        Perbandingan Model ARIMAX 5 Rute (Evaluasi Tugas: Split 70% Latih / 30% Uji Mulai Lebaran 2026)
+                    </div>
+                    <span class="badge-eda" style="background:var(--hijau-bg);color:var(--hijau-light)">5 Rute Utama</span>
+                </div>
+                <div class="pembungkus-tabel">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Rute Penerbangan</th>
+                                <th>Orde Terpilih</th>
+                                <th>AIC</th>
+                                <th>Data Latih / Uji</th>
+                                <th>MAE Rolling</th>
+                                <th>RMSE Rolling</th>
+                                <th>MAPE Rolling</th>
+                                <th>MAPE Multi-step</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelEvaluasiModelBody">
+                            <tr><td colspan="10" style="text-align:center;padding:16px;color:var(--text-dim);">Memuat metrik evaluasi model...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- EDA 1 & EDA 2 -->
+            <div class="grid-eda-2">
+                <!-- EDA 1: TREN MINGGUAN -->
+                <div class="kartu-eda">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="line-chart" style="width:17px;height:17px;color:var(--hijau-light)"></i>
+                            EDA 1: Tren Penumpang Rute Ini
+                        </div>
+                        <span class="badge-eda">Dinamika Waktu</span>
+                    </div>
+                    <div style="height: 230px;">
+                        <canvas id="grafikEdaTren"></canvas>
+                    </div>
+                    <div class="eda-insight">
+                        <strong>Wawasan Tren:</strong> Penumpang naik di sekitar Idul Fitri (Maret 2025 dan Maret 2026) terutama pada rute Jambi, Pekanbaru, dan Karimun. Pada Batam tidak ada lonjakan Lebaran yang jelas (lonjakan terbesarnya akibat penerbangan ATR 72 pada Jun–Jul 2025). Pada data latih, efek Lebaran signifikan secara statistik (p &lt; 0,05) hanya untuk DJB dan PKU.
+                    </div>
+                </div>
+
+                <!-- EDA 2: DISTRIBUSI 5 RUTE -->
+                <div class="kartu-eda">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="navigation" style="width:17px;height:17px;color:var(--primary-light)"></i>
+                            EDA 2: Distribusi Penumpang per Rute
+                        </div>
+                        <span class="badge-eda">5 Rute Utama</span>
+                    </div>
+                    <div style="height: 230px;">
+                        <canvas id="grafikRute"></canvas>
+                    </div>
+                    <div class="eda-insight">
+                        <strong>Wawasan Pangsa Rute:</strong> Rute <strong>Batam (BTH)</strong> adalah rute terpadat (30,1%), disusul Pekanbaru (19,5%), Tanjungpinang (18,3%), Jambi (18,2%), dan Karimun (13,9%).
+                    </div>
+                </div>
+            </div>
+
+            <!-- EDA 3 & EDA 4 & EDA 5 -->
+            <div class="grid-eda-3">
+                <!-- EDA 3: POLA HARI -->
+                <div class="kartu-eda">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="calendar" style="width:16px;height:16px;color:var(--kuning-light)"></i>
+                            EDA 3: Pola Hari Tersibuk
+                        </div>
+                        <span class="badge-eda">Hari Terbang</span>
+                    </div>
+                    <div style="height: 200px;">
+                        <canvas id="grafikHari"></canvas>
+                    </div>
+                    <div class="eda-insight">
+                        <strong>Hari Tersibuk:</strong> Hari <strong>Selasa (4.047 pax)</strong> dan <strong>Jumat (3.969 pax)</strong> adalah hari paling padat. Hari <strong>Rabu & Sabtu</strong> paling lengang karena hampir tidak ada jadwal (hanya 68 dan 38 flight tercatat).
+                    </div>
+                </div>
+
+                <!-- EDA 4: KETEPATAN WAKTU & DELAY -->
+                <div class="kartu-eda">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="clock" style="width:16px;height:16px;color:var(--ungu)"></i>
+                            EDA 4: Analisis Delay & On-Time
+                        </div>
+                        <span class="badge-eda">Ketepatan Waktu</span>
+                    </div>
+                    <div style="height: 200px;">
+                        <canvas id="grafikDelay"></canvas>
+                    </div>
+                    <div class="eda-insight">
+                        <strong>Ketepatan:</strong> <strong>58,7%</strong> Tepat Waktu, <strong>41,3%</strong> Delay (>15 menit). Penyebab delay terbanyak adalah faktor teknis operasional (600 flight), sedangkan cuaca tercatat pada 115 flight.
+                    </div>
+                </div>
+
+                <!-- EDA 5: LOAD FACTOR -->
+                <div class="kartu-eda">
+                    <div class="panel-judul">
+                        <div class="panel-judul-text">
+                            <i data-lucide="users" style="width:16px;height:16px;color:var(--hijau-light)"></i>
+                            EDA 5: Keterisian Kursi (Load Factor)
+                        </div>
+                        <span class="badge-eda">12 Kursi / Flight</span>
+                    </div>
+                    <div style="height: 200px;">
+                        <canvas id="grafikLoadFactor"></canvas>
+                    </div>
+                    <div class="eda-insight" id="insightKeterisian">
+                        <strong>Tingkat Keterisian:</strong> memuat...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             TAB 4: DATA EXPLORER (TABEL BERSIH)
+             ======================================================== -->
+        <section id="halamanExplorer" class="tab-halaman" style="display: none;">
+            <div class="panel">
+                <div class="panel-judul">
+                    <div class="panel-judul-text">
+                        <i data-lucide="database" style="width:17px;height:17px;color:var(--primary-light)"></i>
+                        Penjelajah Data Mingguan Bersih (Terstandarisasi per Rute)
+                    </div>
+                    <span class="badge-eda" id="badgeTotalData">Memuat Data...</span>
+                </div>
+
+                <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+                    <input type="text" id="inputCariData" class="input-cari-tabel" style="margin-bottom:0;flex:1;min-width:260px;" placeholder="🔍 Ketik untuk mencari tanggal, bulan, atau tahun (misal: 2025, Mar, atau Sep)..." oninput="filterDataExplorer(this.value)">
+                    <select id="selectRuteExplorer" class="select-kotak" style="width:220px;margin-bottom:0;" onchange="gantiRuteExplorer(this.value)">
+                        <option value="SEMUA">Semua Rute (Agregat)</option>
+                        <option value="BTH">Batam (BTH)</option>
+                        <option value="PKU">Pekanbaru (PKU)</option>
+                        <option value="DJB">Jambi (DJB)</option>
+                        <option value="TNJ">Tanjungpinang (TNJ)</option>
+                        <option value="TJB">Karimun (TJB)</option>
+                    </select>
+                </div>
+
+                <div class="pembungkus-tabel" style="max-height: 520px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Periode Bulan</th>
+                                <th>Rentang Tanggal</th>
+                                <th>Rute</th>
+                                <th>Total Penumpang</th>
+                                <th>Jumlah Terbang</th>
+                                <th>Berangkat</th>
+                                <th>Datang</th>
+                                <th>Status Lebaran</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelExplorerBody">
+                            <tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-dim);">Memuat data bersih...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================================
+         JAVASCRIPT LOGIC
+         ============================================================ -->
+    <script>
+        lucide.createIcons();
+
+        // STATE APLIKASI
+        let ruteAktif = 'SEMUA';
+        let dataHistoris = [];
+        let dataExplorerList = [];
+        let modelInfoList = [];
+        let horizonMinggu = 8;
+        let operasionalData = null;
+        let modeSumbu = 'bulan'; // 'bulan' atau 'minggu'
+        let cachePrediksiData = [];
+
+        // CHART INSTANCES
+        let grafikUtamaInstance = null;
+        let grafikValidasiInstance = null;
+        let grafikEdaTrenInstance = null;
+        let grafikRuteInstance = null;
+        let grafikHariInstance = null;
+        let grafikDelayInstance = null;
+        let grafikLoadFactorInstance = null;
+
+        // JUDUL PER TAB
+        const INFO_TAB = {
+            'prediksi': {
+                judul: 'Simulator Prediksi Penumpang per Rute & Kebutuhan Armada',
+                subjudul: 'Proyeksi deret waktu berbasis model ARIMAX dengan penanda musiman Lebaran per rute'
+            },
+            'validasi': {
+                judul: 'Validasi Akurasi Model terhadap Data Masa Lalu & Uji',
+                subjudul: 'Perbandingan data aktual observasi dengan model ARIMAX (Split Latih 71% / Uji 29% mulai Lebaran 2026)'
+            },
+            'eda': {
+                judul: 'Eksplorasi Data Analitik & Evaluasi Model ARIMAX',
+                subjudul: 'Perbandingan 5 model ARIMAX rute, pola musiman, hari tersibuk, keterisian kursi & delay'
+            },
+            'explorer': {
+                judul: 'Penjelajah Data Mingguan Terstandarisasi',
+                subjudul: 'Dataset bersih hasil prapemrosesan per rute (penanganan gap, normalisasi, dan flag Lebaran)'
+            }
+        };
+
+        const NAMA_RUTE_MAP = {
+            'SEMUA': 'Semua Rute (Agregat)',
+            'BTH': 'SIQ ↔ Batam (BTH)',
+            'PKU': 'SIQ ↔ Pekanbaru (PKU)',
+            'DJB': 'SIQ ↔ Jambi (DJB)',
+            'TNJ': 'SIQ ↔ Tanjungpinang (TNJ)',
+            'TJB': 'SIQ ↔ Karimun (TJB)',
+        };
+
+        // GANTI TAB
+        function gantiHalaman(halaman) {
+            document.querySelectorAll('.tab-halaman').forEach(h => h.style.display = 'none');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('aktif'));
+
+            if (INFO_TAB[halaman]) {
+                document.getElementById('judulHalamanAktif').textContent = INFO_TAB[halaman].judul;
+                document.getElementById('subjudulHalamanAktif').textContent = INFO_TAB[halaman].subjudul;
+            }
+
+            if (halaman === 'prediksi') {
+                document.getElementById('halamanPrediksi').style.display = 'flex';
+                document.getElementById('navBtnPrediksi').classList.add('aktif');
+            } else if (halaman === 'validasi') {
+                document.getElementById('halamanValidasi').style.display = 'flex';
+                document.getElementById('navBtnValidasi').classList.add('aktif');
+                gambarGrafikValidasi();
+                if (dataHistoris.length > 0) {
+                    pilihMingguHistoris('2026-03-23'); // Default ke Lebaran 2026 (periode uji)
+                }
+            } else if (halaman === 'eda') {
+                document.getElementById('halamanEda').style.display = 'flex';
+                document.getElementById('navBtnEda').classList.add('aktif');
+                muatModelInfo();
+                gambarSemuaEda();
+            } else if (halaman === 'explorer') {
+                document.getElementById('halamanExplorer').style.display = 'flex';
+                document.getElementById('navBtnExplorer').classList.add('aktif');
+                muatDataExplorer();
+            }
+            lucide.createIcons();
+        }
+
+        // GANTI RUTE ANALISIS
+        async function pilihRute(kode) {
+            ruteAktif = kode;
+            document.querySelectorAll('.pill-rute').forEach(b => b.classList.remove('aktif'));
+            const elPill = document.getElementById('pill-' + kode);
+            if (elPill) elPill.classList.add('aktif');
+
+            const namaR = NAMA_RUTE_MAP[kode] || kode;
+            document.getElementById('labelRuteAktif').textContent = namaR;
+            document.getElementById('sidebarInfoRute').textContent = namaR;
+            document.getElementById('judulGrafikUtama').textContent = `Tren Historis & Proyeksi ARIMAX - ${namaR}`;
+            document.getElementById('judulGrafikValidasi').textContent = `Validasi Akurasi ARIMAX: ${namaR} (Uji Mulai Lebaran 2026)`;
+
+            // Update data
+            await muatDataRingkas();
+            await muatDataHistoris();
+            await jalankanPrediksi();
+
+            if (document.getElementById('halamanValidasi').style.display === 'flex') {
+                gambarGrafikValidasi();
+            }
+            if (document.getElementById('halamanEda').style.display === 'flex') {
+                gambarSemuaEda();
+            }
+        }
+
+        // TOGGLE SUMBU X
+        function setModeSumbu(mode) {
+            modeSumbu = mode;
+            ['btnAxisPredBulan', 'btnAxisValBulan'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('aktif', mode === 'bulan');
+            });
+            ['btnAxisPredMinggu', 'btnAxisValMinggu'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('aktif', mode === 'minggu');
+            });
+
+            gambarGrafikUtama(cachePrediksiData);
+            gambarGrafikValidasi();
+        }
+
+        // ANIMASI COUNTER
+        function animateCounter(id, target, suffix = '', duration = 600) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const start = 0;
+            const startTime = performance.now();
+
+            function updateCounter(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = 1 - (1 - progress) * (1 - progress);
+                const current = Math.floor(start + (target - start) * ease);
+                el.textContent = current.toLocaleString('id-ID') + suffix;
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    el.textContent = target.toLocaleString('id-ID') + suffix;
+                }
+            }
+            requestAnimationFrame(updateCounter);
+        }
+
+        // FORMAT TANGGAL
+        function formatNamaMinggu(dateStr) {
+            if (!dateStr) return { judul: '', singkat: '', rentang: '', bulanTahun: '', tanggalMgg: '' };
+            const parts = dateStr.split('-');
+            const y = parseInt(parts[0], 10);
+            const m = parseInt(parts[1], 10) - 1;
+            const day = parseInt(parts[2], 10);
+
+            const start = new Date(y, m, day);
+            const end = new Date(start.getTime() + 6 * 24 * 3600 * 1000);
+
+            const NAMA_BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            const BLN_PENDEK = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+            const blnUtama = NAMA_BLN[start.getMonth()];
+            const thnUtama = start.getFullYear();
+            const mggKe = Math.floor((start.getDate() - 1) / 7) + 1;
+
+            let rentang = '';
+            if (start.getMonth() === end.getMonth()) {
+                rentang = `${start.getDate()} - ${end.getDate()} ${BLN_PENDEK[start.getMonth()]} ${thnUtama}`;
+            } else {
+                rentang = `${start.getDate()} ${BLN_PENDEK[start.getMonth()]} - ${end.getDate()} ${BLN_PENDEK[end.getMonth()]} ${end.getFullYear()}`;
+            }
+
+            return {
+                judul: `${blnUtama} ${thnUtama} (Mgg ${mggKe})`,
+                bulanTahun: `${blnUtama} ${thnUtama}`,
+                bulanSingkat: `${BLN_PENDEK[start.getMonth()]} ${thnUtama.toString().slice(-2)}`,
+                tanggalMgg: `${start.getDate()} ${BLN_PENDEK[start.getMonth()]}`,
+                rentang: rentang,
+                thn: thnUtama,
+                bln: start.getMonth(),
+                tglMulai: start.getDate()
+            };
+        }
+
+        // HORIZON PREDIKSI
+        function onSliderHorizon(val) {
+            horizonMinggu = parseInt(val, 10);
+            document.getElementById('valSliderHorizon').textContent = horizonMinggu;
+            updateLabelHorizon(horizonMinggu);
+            document.querySelectorAll('#halamanPrediksi .tombol-opsi').forEach(b => b.classList.remove('aktif'));
+            jalankanPrediksi();
+        }
+
+        function updateLabelHorizon(val) {
+            const label = document.getElementById('labelHorizonAktif');
+            if (!label) return;
+            if (val === 52) {
+                label.textContent = '52 Minggu (1 Tahun Penuh)';
+            } else if (val === 104) {
+                label.textContent = '104 Minggu (2 Tahun Penuh)';
+            } else {
+                const bln = (val / 4.3).toFixed(1).replace('.0', '');
+                label.textContent = `${val} Minggu (~${bln} Bulan)`;
+            }
+        }
+
+        function pilihHorizon(val) {
+            horizonMinggu = val;
+            document.querySelectorAll('#halamanPrediksi .tombol-opsi').forEach(b => b.classList.remove('aktif'));
+            if (window.event && window.event.target && window.event.target.classList.contains('tombol-opsi')) {
+                window.event.target.classList.add('aktif');
+            }
+            const slider = document.getElementById('sliderHorizon');
+            if (slider) slider.value = val;
+            const valSlider = document.getElementById('valSliderHorizon');
+            if (valSlider) valSlider.textContent = val;
+            updateLabelHorizon(val);
+            jalankanPrediksi();
+        }
+
+        // 1. MUAT DATA RINGKASAN
+        async function muatDataRingkas() {
+            try {
+                const res = await fetch(`/api/ringkasan?rute=${ruteAktif}`);
+                const d = await res.json();
+                animateCounter('valTotal', d.total_penumpang);
+                document.getElementById('ketTotalTeks').textContent = `${d.minggu_data} minggu penuh berdata (tanpa Jan 2026)`;
+                animateCounter('valRata', Math.round(d.rata_rata));
+                document.getElementById('valAkurasi').textContent = `${d.akurasi}%`;
+                document.getElementById('ketAkurasiTeks').textContent = d.rute === 'SEMUA'
+                    ? 'Model agregat: lebih kecil karena fluktuasi antar rute saling menutupi, tidak sebanding dengan per rute'
+                    : 'Evaluasi pada periode uji Lebaran 2026';
+                document.getElementById('valOrde').textContent = d.orde;
+                document.getElementById('ketOrde').innerHTML = `<i data-lucide="sparkle" style="width:12px;height:12px;color:var(--biru)"></i> MAE: ${d.mae} | MAPE: ${d.mape}% (AIC: ${d.aic})`;
+                document.getElementById('sidebarInfoDesc').innerHTML = `${d.orde} + Lebaran.<br>MAE: ${d.mae} | MAPE: ${d.mape}%.<br>Split: Latih 71% | Uji 29%.`;
+                lucide.createIcons();
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // 2. MUAT DATA HISTORIS
+        async function muatDataHistoris() {
+            try {
+                const res = await fetch(`/api/historis?rute=${ruteAktif}`);
+                dataHistoris = await res.json();
+                isiPilihanDropdownHistoris();
+                isiTabelHistoris(dataHistoris);
+                gambarGrafikUtama(cachePrediksiData);
+                document.getElementById('badgeMingguObservasi').textContent = `${dataHistoris.length} Minggu Observasi`;
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function isiPilihanDropdownHistoris() {
+            const sel = document.getElementById('selectMingguLalu');
+            sel.innerHTML = '';
+            dataHistoris.forEach((d) => {
+                const info = formatNamaMinggu(d.minggu);
+                const opt = document.createElement('option');
+                opt.value = d.minggu;
+                const infoLeb = d.lebaran === 1 ? ' [LEBARAN]' : '';
+                const infoUji = d.is_test ? ' [UJI]' : '';
+                const infoInterp = d.interpolasi ? ' [DATA TIDAK ADA - INTERPOLASI]' : '';
+                opt.textContent = `${info.rentang} (Asli: ${d.interpolasi ? '-' : d.penumpang} pax, Model: ${Math.round(d.fitted || 0)} pax)${infoLeb}${infoUji}${infoInterp}`;
+                sel.appendChild(opt);
+            });
+        }
+
+        function isiTabelHistoris(list) {
+            const tbody = document.getElementById('tabelMasaLaluBody');
+            tbody.innerHTML = '';
+            list.forEach(d => {
+                const info = formatNamaMinggu(d.minggu);
+                const tr = document.createElement('tr');
+                tr.id = 'baris-hist-' + d.minggu;
+                tr.onclick = () => pilihMingguHistoris(d.minggu);
+                const selisih = d.selisih !== null ? Math.abs(d.selisih) : 0;
+                const fitVal = d.is_test && d.prediksi_rolling ? d.prediksi_rolling : (d.fitted || 0);
+                const tagTipe = d.is_test ? '<span class="tag-uji">Data Uji</span>' : '<span class="tag-biasa">Data Latih</span>';
+
+                tr.innerHTML = `
+                    <td><strong style="color:#ffffff;">${info.bulanTahun}</strong></td>
+                    <td style="color:var(--text-sub);">${info.rentang}</td>
+                    <td>${tagTipe}</td>
+                    <td style="color:var(--hijau-light);font-weight:700;">${d.interpolasi ? '- (tidak ada data)' : d.penumpang + ' orang'}</td>
+                    <td style="color:var(--primary-light);font-weight:600;">${Math.round(fitVal)} orang</td>
+                    <td style="color:var(--kuning-light);">${selisih} org</td>
+                    <td><strong style="color:var(--hijau-light);">${d.akurasi !== null ? d.akurasi + '%' : '--'}</strong></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function pilihCepatHistoris(tgl) {
+            document.getElementById('selectMingguLalu').value = tgl;
+            pilihMingguHistoris(tgl);
+        }
+
+        function pilihMingguHistoris(tgl) {
+            const item = dataHistoris.find(d => d.minggu === tgl);
+            if (!item) return;
+
+            const info = formatNamaMinggu(tgl);
+            document.getElementById('selectMingguLalu').value = tgl;
+            const fitVal = item.is_test && item.prediksi_rolling ? item.prediksi_rolling : (item.fitted || 0);
+
+            document.getElementById('judulMingguTerpilih').innerHTML = `
+                ${info.rentang} <span style="font-size:12px;font-weight:600;color:var(--primary-light);">(${info.judul})</span> 
+                ${item.lebaran === 1 ? '<span class="tag-lebaran" style="margin-left:6px;">Lebaran</span>' : ''}
+                ${item.is_test ? '<span class="tag-uji" style="margin-left:6px;">Data Uji 2026</span>' : '<span class="tag-biasa" style="margin-left:6px;">Data Latih</span>'}
+            `;
+            document.getElementById('angkaAsli').textContent = item.interpolasi ? '-' : item.penumpang;
+            document.getElementById('angkaTebakan').textContent = Math.round(fitVal);
+
+            const selisih = Math.abs(item.selisih || 0);
+            document.getElementById('angkaMeleset').textContent = `${selisih} org`;
+
+            document.querySelectorAll('#tabelMasaLaluBody tr').forEach(r => r.classList.remove('baris-aktif'));
+            const targetRow = document.getElementById('baris-hist-' + tgl);
+            if (targetRow) {
+                targetRow.classList.add('baris-aktif');
+                targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            const catatan = document.getElementById('catatanKeakuratan');
+            if (item.is_test && item.lebaran === 1) {
+                catatan.innerHTML = `<strong>Minggu Lebaran 2026 (data uji):</strong> prediksi rolling 1 minggu meleset ${selisih} orang (akurasi <strong>${item.akurasi}%</strong>). Efek Lebaran tidak seragam antar rute, jadi ketepatan pada minggu ini bervariasi.`;
+            } else if (item.is_test) {
+                catatan.innerHTML = `<strong>Data Uji Evaluasi:</strong> Termasuk dalam 29% data uji. Prediksi rolling 1-step meleset ${selisih} orang (Akurasi: <strong>${item.akurasi}%</strong>).`;
+            } else if (selisih <= 5) {
+                catatan.innerHTML = `Model menebak <strong>sangat presisi</strong> (hanya meleset ${selisih} orang) dengan akurasi <strong>${item.akurasi}%</strong>.`;
+            } else {
+                catatan.innerHTML = `Meleset sebesar ${selisih} orang, masih berada dalam batas wajar kapasitas muat pesawat perintis C208B.`;
+            }
+        }
+
+        // 3. JALANKAN PREDIKSI MASA DEPAN
+        async function jalankanPrediksi() {
+            try {
+                const res = await fetch('/api/prediksi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ rute: ruteAktif, minggu: horizonMinggu })
+                });
+                const resJson = await res.json();
+                if (resJson.status === 'ok') {
+                    const data = resJson.data;
+                    cachePrediksiData = data;
+                    tampilkanHasilPrediksi(data, resJson.kapasitas_flight || 12);
+                    gambarGrafikUtama(data);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function tampilkanHasilPrediksi(data, kapasitas) {
+            let total = 0;
+            let adaLebaran = false;
+            let mggLebaran = '';
+
+            data.forEach(d => {
+                total += d.prediksi;
+                if (d.lebaran === 1) {
+                    adaLebaran = true;
+                    mggLebaran = d.minggu;
+                }
+            });
+
+            const rata = Math.round(total / data.length);
+            const flights = Math.ceil(rata / kapasitas);
+
+            document.getElementById('angkaTotalPax').textContent = Math.round(total).toLocaleString('id-ID');
+            document.getElementById('angkaRataPax').textContent = rata;
+            document.getElementById('angkaFlight').textContent = `${flights}x /mgg`;
+
+            const kotak = document.getElementById('kotakHasil');
+            const status = document.getElementById('statusHasil');
+            const teks = document.getElementById('teksHasil');
+
+            if (adaLebaran) {
+                const infoLeb = formatNamaMinggu(mggLebaran);
+                kotak.className = 'kotak-info peringatan';
+                status.className = 'info-status waspada';
+                status.innerHTML = `<i data-lucide="alert-triangle" style="width:15px;height:15px"></i> Perhatian: Lonjakan Mudik Lebaran Terdeteksi!`;
+                teks.innerHTML = `Terdeteksi peningkatan penumpang pada <strong>${infoLeb.rentang}</strong> (${infoLeb.bulanTahun}). Rekomendasi: Siapkan slot penerbangan tambahan (Extra Flight) khusus rute ini.`;
+            } else {
+                kotak.className = 'kotak-info';
+                status.className = 'info-status sukses';
+                status.innerHTML = `<i data-lucide="check-circle" style="width:15px;height:15px"></i> Kapasitas Armada: Terkendali & Cukup`;
+                teks.innerHTML = `Rata-rata permintaan (${rata} penumpang/minggu) dapat dilayani optimal dengan ${flights}x penerbangan Cessna C208B per minggu.`;
+            }
+            lucide.createIcons();
+
+            const tbody = document.getElementById('tabelHasilPrediksi');
+            tbody.innerHTML = '';
+            data.forEach((d, idx) => {
+                const info = formatNamaMinggu(d.minggu);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong style="color:#ffffff;">Minggu ke-${idx + 1} Depan</strong> (${info.bulanTahun})</td>
+                    <td style="color:var(--text-sub);">${info.rentang}</td>
+                    <td style="color:var(--primary-light);font-weight:700;">${Math.round(d.prediksi)} orang</td>
+                    <td style="color:var(--text-dim);font-size:11px;">${Math.round(d.batas_bawah)} - ${Math.round(d.batas_atas)} pax</td>
+                    <td><strong style="color:#ffffff;">${d.kebutuhan_flight} flight</strong> /mgg</td>
+                    <td>${d.lebaran === 1 ? '<span class="tag-lebaran">Musim Lebaran</span>' : '<span class="tag-biasa">Normal</span>'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // PEMBUAT LABEL SUMBU X
+        function buatLabelSumbu(semuaTanggal) {
+            if (modeSumbu === 'minggu') {
+                return (val, idx) => {
+                    const info = formatNamaMinggu(semuaTanggal[idx]);
+                    return info.tanggalMgg;
+                };
+            }
+
+            const petaBulan = new Map();
+            semuaTanggal.forEach((tgl, idx) => {
+                const info = formatNamaMinggu(tgl);
+                const kunciBulan = `${info.thn}-${info.bln}`;
+                if (!petaBulan.has(kunciBulan)) {
+                    petaBulan.set(kunciBulan, idx);
+                }
+            });
+
+            return (val, idx) => {
+                const tgl = semuaTanggal[idx];
+                if (!tgl) return '';
+                const info = formatNamaMinggu(tgl);
+                const kunciBulan = `${info.thn}-${info.bln}`;
+
+                if (petaBulan.get(kunciBulan) === idx) {
+                    if (info.bln === 0 || idx === 0) {
+                        return info.bulanSingkat;
+                    }
+                    const NAMA_PENDEK = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+                    return NAMA_PENDEK[info.bln];
+                }
+                return '';
+            };
+        }
+
+        // GAMBAR GRAFIK TAB 1
+        function gambarGrafikUtama(prediksiData = []) {
+            const canvas = document.getElementById('grafikUtama');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const labelHistoris = dataHistoris.map(d => d.minggu);
+            const aktual = dataHistoris.map(d => d.interpolasi ? null : d.penumpang);
+
+            const labelPrediksi = prediksiData.map(d => d.minggu);
+            const semuaLabel = [...labelHistoris, ...labelPrediksi];
+
+            const lastAktual = aktual[aktual.length - 1];
+            const dataPred = new Array(labelHistoris.length - 1).fill(null);
+            dataPred.push(lastAktual);
+            prediksiData.forEach(d => dataPred.push(d.prediksi));
+
+            if (grafikUtamaInstance) grafikUtamaInstance.destroy();
+
+            const datasets = [
+                {
+                    label: `Aktual Lapangan (${NAMA_RUTE_MAP[ruteAktif] || ruteAktif})`,
+                    data: aktual,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                    fill: true,
+                    borderWidth: 2,
+                    pointRadius: 2.5,
+                    pointHoverRadius: 5,
+                    tension: 0.16
+                }
+            ];
+
+            if (prediksiData.length > 0) {
+                datasets.push({
+                    label: 'Proyeksi Masa Depan (ARIMAX)',
+                    data: dataPred,
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.14)',
+                    fill: true,
+                    borderWidth: 2.5,
+                    borderDash: [5, 4],
+                    pointRadius: 4,
+                    pointBackgroundColor: '#38bdf8',
+                    tension: 0.2
+                });
+            }
+
+            const formatterSumbuX = buatLabelSumbu(semuaLabel);
+
+            grafikUtamaInstance = new Chart(ctx, {
+                type: 'line',
+                data: { labels: semuaLabel, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                color: '#cbd5e1',
+                                boxWidth: 14,
+                                font: { size: 12, family: 'Plus Jakarta Sans', weight: '600' },
+                                padding: 14
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#172642',
+                            titleColor: '#ffffff',
+                            bodyColor: '#cbd5e1',
+                            borderColor: 'rgba(56, 189, 248, 0.4)',
+                            borderWidth: 1,
+                            padding: 12,
+                            callbacks: {
+                                title: ctxs => {
+                                    const inf = formatNamaMinggu(semuaLabel[ctxs[0].dataIndex]);
+                                    return `📅 ${inf.rentang} (${inf.judul})`;
+                                },
+                                label: item => ` ${item.dataset.label}: ${Math.round(item.raw)} orang`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.06)' },
+                            ticks: {
+                                color: '#cbd5e1',
+                                font: { size: 11, family: 'Plus Jakarta Sans', weight: '600' },
+                                maxRotation: modeSumbu === 'minggu' ? 45 : 0,
+                                autoSkip: modeSumbu === 'minggu',
+                                callback: formatterSumbuX
+                            }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.06)' },
+                            ticks: {
+                                color: '#cbd5e1',
+                                font: { size: 11, family: 'Plus Jakarta Sans' },
+                                callback: v => v + ' pax'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // GAMBAR GRAFIK TAB 2 (VALIDASI LATIH & UJI)
+        function gambarGrafikValidasi() {
+            const canvas = document.getElementById('grafikValidasi');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const labels = dataHistoris.map(d => d.minggu);
+            const aktual = dataHistoris.map(d => d.interpolasi ? null : d.penumpang);
+
+            // Pisahkan fitted data latih dan prediksi data uji
+            const fittedLatih = dataHistoris.map(d => (!d.is_test ? d.fitted : null));
+            const predUjiRolling = dataHistoris.map(d => (d.is_test ? (d.prediksi_rolling || d.fitted) : null));
+            const predUjiMulti = dataHistoris.map(d => (d.is_test && d.prediksi_multi ? d.prediksi_multi : null));
+
+            if (grafikValidasiInstance) grafikValidasiInstance.destroy();
+
+            const formatterSumbuX = buatLabelSumbu(labels);
+
+            const datasets = [
+                {
+                    label: 'Aktual Observasi',
+                    data: aktual,
+                    borderColor: '#10b981',
+                    borderWidth: 2,
+                    pointRadius: 2.5,
+                    tension: 0.16
+                },
+                {
+                    label: 'Fitted Model (Data Latih ~71%)',
+                    data: fittedLatih,
+                    borderColor: '#38bdf8',
+                    borderWidth: 1.8,
+                    borderDash: [4, 4],
+                    pointRadius: 0,
+                    tension: 0.16
+                },
+                {
+                    label: 'Prediksi Uji Rolling (Mulai Lebaran 2026 ~29%)',
+                    data: predUjiRolling,
+                    borderColor: '#fbbf24',
+                    borderWidth: 2.4,
+                    pointRadius: 3.5,
+                    pointBackgroundColor: '#fbbf24',
+                    tension: 0.16
+                }
+            ];
+
+            // Tambahkan multi-step jika ada
+            if (predUjiMulti.some(v => v !== null)) {
+                datasets.push({
+                    label: 'Prediksi Uji Multi-step (Statis 25 Minggu)',
+                    data: predUjiMulti,
+                    borderColor: '#a855f7',
+                    borderWidth: 1.8,
+                    borderDash: [2, 2],
+                    pointRadius: 2,
+                    tension: 0.16
+                });
+            }
+
+            grafikValidasiInstance = new Chart(ctx, {
+                type: 'line',
+                data: { labels: labels, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: { duration: 400 },
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                color: '#cbd5e1',
+                                boxWidth: 14,
+                                font: { size: 11.5, family: 'Plus Jakarta Sans', weight: '600' },
+                                padding: 12
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#172642',
+                            titleColor: '#ffffff',
+                            bodyColor: '#cbd5e1',
+                            borderColor: 'rgba(56, 189, 248, 0.4)',
+                            borderWidth: 1,
+                            padding: 12,
+                            callbacks: {
+                                title: ctxs => {
+                                    const inf = formatNamaMinggu(labels[ctxs[0].dataIndex]);
+                                    const itm = dataHistoris[ctxs[0].dataIndex];
+                                    const statusUji = itm && itm.is_test ? ' [DATA UJI 2026]' : ' [DATA LATIH]';
+                                    return `📅 ${inf.rentang}${statusUji}`;
+                                },
+                                label: item => ` ${item.dataset.label}: ${Math.round(item.raw)} orang`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.06)' },
+                            ticks: {
+                                color: '#cbd5e1',
+                                font: { size: 11, family: 'Plus Jakarta Sans', weight: '600' },
+                                maxRotation: modeSumbu === 'minggu' ? 45 : 0,
+                                autoSkip: modeSumbu === 'minggu',
+                                callback: formatterSumbuX
+                            }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.06)' },
+                            ticks: {
+                                color: '#cbd5e1',
+                                font: { size: 11, family: 'Plus Jakarta Sans' },
+                                callback: v => v + ' pax'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 4. MUAT TABEL PERBANDINGAN MODEL (TAB 3)
+        async function muatModelInfo() {
+            try {
+                const res = await fetch('/api/model_info');
+                modelInfoList = await res.json();
+                const tbody = document.getElementById('tabelEvaluasiModelBody');
+                tbody.innerHTML = '';
+
+                modelInfoList.forEach(m => {
+                    const tr = document.createElement('tr');
+                    const isAktif = (m.rute === ruteAktif);
+                    if (isAktif) tr.classList.add('baris-aktif');
+
+                    tr.innerHTML = `
+                        <td><strong style="color:var(--primary-light);">${m.rute}</strong></td>
+                        <td><strong style="color:#ffffff;">${m.nama}</strong></td>
+                        <td><span class="badge-eda" style="background:var(--ungu-bg);color:var(--ungu);">${m.orde}</span></td>
+                        <td style="color:var(--text-sub);">${m.aic}</td>
+                        <td style="color:var(--text-dim);font-size:11px;">${m.n_latih} mgg (${m.pct_latih}%) / ${m.n_uji} mgg</td>
+                        <td style="color:var(--hijau-light);font-weight:700;">${m.mae_rolling}</td>
+                        <td style="color:var(--kuning-light);">${m.rmse_rolling}</td>
+                        <td><strong style="color:var(--hijau-light);">${m.mape_rolling}%</strong></td>
+                        <td style="color:var(--text-sub);">${m.mape_multi}%</td>
+                        <td>
+                            <button class="btn-toggle-axis ${isAktif ? 'aktif' : ''}" onclick="pilihRute('${m.rute}'); gantiHalaman('prediksi');">
+                                Analisis Rute
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // 5. GAMBAR 5 GRAFIK EDA (TAB 3)
+        async function gambarSemuaEda() {
+            if (!operasionalData) {
+                try {
+                    const res = await fetch('/api/operasional');
+                    operasionalData = await res.json();
+                } catch (e) {
+                    console.error(e);
+                    return;
+                }
+            }
+
+            const d = operasionalData;
+
+            // EDA 1: TREN MINGGUAN
+            const ctxEdaTren = document.getElementById('grafikEdaTren').getContext('2d');
+            if (grafikEdaTrenInstance) grafikEdaTrenInstance.destroy();
+            const labelsTren = dataHistoris.map(h => h.minggu);
+            grafikEdaTrenInstance = new Chart(ctxEdaTren, {
+                type: 'line',
+                data: {
+                    labels: labelsTren,
+                    datasets: [{
+                        label: `Penumpang (${NAMA_RUTE_MAP[ruteAktif] || ruteAktif})`,
+                        data: dataHistoris.map(h => h.interpolasi ? null : h.penumpang),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16,185,129,0.12)',
+                        fill: true,
+                        borderWidth: 2,
+                        tension: 0.18,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: {
+                                color: '#cbd5e1',
+                                font: { size: 10 },
+                                callback: buatLabelSumbu(labelsTren)
+                            }
+                        },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cbd5e1', font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // EDA 2: RUTE
+            const ctxR = document.getElementById('grafikRute').getContext('2d');
+            if (grafikRuteInstance) grafikRuteInstance.destroy();
+            grafikRuteInstance = new Chart(ctxR, {
+                type: 'bar',
+                data: {
+                    labels: d.rute.map(r => r.kode),
+                    datasets: [{
+                        data: d.rute.map(r => r.pax),
+                        backgroundColor: ['#0284c7', '#38bdf8', '#10b981', '#6366f1', '#a855f7'],
+                        borderRadius: 6,
+                        barThickness: 20
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `${ctx.parsed.x.toLocaleString('id-ID')} pax (${d.rute[ctx.dataIndex].share}% share, ${d.rute[ctx.dataIndex].load_factor}% LF)`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cbd5e1', font: { size: 10 } } },
+                        y: { grid: { display: false }, ticks: { color: '#ffffff', font: { size: 11, weight: '700' } } }
+                    }
+                }
+            });
+
+            // EDA 3: HARI
+            const ctxH = document.getElementById('grafikHari').getContext('2d');
+            if (grafikHariInstance) grafikHariInstance.destroy();
+            grafikHariInstance = new Chart(ctxH, {
+                type: 'bar',
+                data: {
+                    labels: d.hari.map(h => h.hari),
+                    datasets: [{
+                        data: d.hari.map(h => h.pax),
+                        backgroundColor: d.hari.map(h => h.pax > 3500 ? '#38bdf8' : 'rgba(56, 189, 248, 0.4)'),
+                        borderRadius: 6,
+                        barThickness: 18
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#ffffff', font: { size: 10.5, weight: '600' } } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cbd5e1', font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // EDA 4: DELAY
+            const ctxD = document.getElementById('grafikDelay').getContext('2d');
+            if (grafikDelayInstance) grafikDelayInstance.destroy();
+            grafikDelayInstance = new Chart(ctxD, {
+                type: 'doughnut',
+                data: {
+                    labels: [`Tepat Waktu (${String(d.delay.tepat_waktu_pct).replace('.', ',')}%)`, `Delay >15 mnt (${String(d.delay.delay_pct).replace('.', ',')}%)`],
+                    datasets: [{
+                        data: [d.delay.tepat_waktu_pct, d.delay.delay_pct],
+                        backgroundColor: ['#10b981', '#f59e0b'],
+                        borderWidth: 2,
+                        borderColor: '#182642'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 11, family: 'Plus Jakarta Sans', weight: '600' } } }
+                    }
+                }
+            });
+
+            // EDA 5: LOAD FACTOR
+            const elKet = document.getElementById('insightKeterisian');
+            if (elKet && d.keterisian) {
+                const lfTxt = String(d.keterisian.load_factor_pct).replace('.', ',');
+                elKet.innerHTML = `<strong>Tingkat Keterisian:</strong> Rata-rata <strong>${lfTxt}%</strong> kursi terisi (dewasa + anak; bayi dipangku tidak dihitung). ${d.keterisian.catatan_atr || ''} Tertinggi: <strong>${d.keterisian.rute_tertinggi}</strong>, terendah: <strong>${d.keterisian.rute_terendah}</strong>.`;
+            }
+            const ctxLF = document.getElementById('grafikLoadFactor').getContext('2d');
+            if (grafikLoadFactorInstance) grafikLoadFactorInstance.destroy();
+            grafikLoadFactorInstance = new Chart(ctxLF, {
+                type: 'bar',
+                data: {
+                    labels: d.rute.map(r => r.kode),
+                    datasets: [{
+                        data: d.rute.map(r => r.load_factor),
+                        backgroundColor: d.rute.map(r => r.load_factor >= 80 ? '#10b981' : '#38bdf8'),
+                        borderRadius: 6,
+                        barThickness: 18
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => `${ctx.parsed.y}% kursi terisi` } }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#ffffff', font: { size: 10.5, weight: '600' } } },
+                        y: {
+                            min: 0, max: 100,
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#cbd5e1', font: { size: 10 }, callback: v => v + '%' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 6. DATA EXPLORER (TAB 4)
+        async function muatDataExplorer() {
+            const ruteExp = document.getElementById('selectRuteExplorer') ? document.getElementById('selectRuteExplorer').value : 'SEMUA';
+            try {
+                const res = await fetch(`/api/data_explorer?rute=${ruteExp}`);
+                dataExplorerList = await res.json();
+                document.getElementById('badgeTotalData').textContent = `${dataExplorerList.length} Baris Data`;
+                tampilkanDataExplorer(dataExplorerList);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function gantiRuteExplorer(val) {
+            muatDataExplorer();
+        }
+
+        function tampilkanDataExplorer(list) {
+            const tbody = document.getElementById('tabelExplorerBody');
+            tbody.innerHTML = '';
+            list.forEach(r => {
+                const info = formatNamaMinggu(r.minggu);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong style="color:#ffffff;">${info.bulanTahun}</strong></td>
+                    <td style="color:var(--text-sub);">${info.rentang}</td>
+                    <td><span class="badge-eda">${r.rute}</span></td>
+                    <td><strong style="color:var(--hijau-light);">${r.penumpang}</strong> pax</td>
+                    <td>${r.penerbangan} flight</td>
+                    <td>${r.berangkat} pax</td>
+                    <td>${r.datang} pax</td>
+                    <td>${r.lebaran === 1 ? '<span class="tag-lebaran">Lebaran</span>' : '<span class="tag-biasa">Normal</span>'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterDataExplorer(query) {
+            const q = query.toLowerCase().trim();
+            const filtered = dataExplorerList.filter(r => 
+                r.minggu.toLowerCase().includes(q) ||
+                (r.rute && r.rute.toLowerCase().includes(q)) ||
+                formatNamaMinggu(r.minggu).bulanTahun.toLowerCase().includes(q) ||
+                formatNamaMinggu(r.minggu).rentang.toLowerCase().includes(q)
+            );
+            tampilkanDataExplorer(filtered);
+        }
+
+        // INISIALISASI
+        window.addEventListener('DOMContentLoaded', async () => {
+            await muatDataRingkas();
+            await muatDataHistoris();
+            await jalankanPrediksi();
+        });
+    </script>
+</body>
+</html>

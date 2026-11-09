@@ -1,0 +1,8 @@
+flask
+pandas
+numpy
+statsmodels
+openpyxl
+matplotlib
+streamlit>=1.50
+plotly

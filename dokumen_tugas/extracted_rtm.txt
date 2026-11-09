@@ -1,0 +1,245 @@
+=== PAGE 1 ===
+1
+UNIVERSITAS MARITIM RAJA ALI HAJI
+FAKULTAS TEKNIK DAN TEKNOLOGI KEMARITIMAN
+PROGRAM STUDI TEKNIK INFORMATIKA
+RENCANA TUGAS MAHASISWA
+MATAKULIAH Penambangan Data
+KODE INF11121 SKS 5 SEMESTER 3
+DOSEN
+PENGAMPU
+Tekad Matulatan
+Muhamad Fadli
+BENTUK TUGAS
+I. Project dengan tim beranggotakan 2-5 orang. Mahasiswa menentukan object project pengolahan data dan
+secara mandiri mencari data mentah yang real di masyarakat, untuk seterusnya di pergunakan dalam proses
+project penambangan data. Proses harus menyeluruh sesuai kaidah penambangan data dengan hasil produk
+sistem penambangan data.
+II. Penulisan Materi Ajar. Tugas Individu dalam penelusuran mendalam terhadap materi ajar.
+JUDUL TUGAS
+I. Project Penambangan Data
+II. Tugas Menulis
+SUB CAPAIAN PEMBELAJARAN MATA KULIAH
+I. SubCPMK0421 Mampu menyelesaikan masalah penambangan data melalui proyek secara tim
+II. SubCPMK0415 Mampu mengidentifikasi dan menerapkan penyelesaian masalah prediksi
+SubCPMK0416 Mampu mengidentifikasi dan menerapkan penyelesaian masalah pengelompokkan
+SubCPMK0414 Mampu mengidentifikasi dan menerapkan penyelesaian masalah asosiasi
+SubCPMK0413 Mampu mengevaluasi dan menginterprestasikan hasil temuan model
+DESKRIPSI TUGAS
+I. Kegiatan pengembangan produk penambangan data terhadap kasus riil yang diambil dari masyarakat atau
+lembaga mulai dari tahap pengumpulan, pre-proses, seleksi, transformasi, proses penambangan dan
+interprestasi
+II. Model Inquiry dalam pembelajaran dimana mahasiswa secara mandiri mencari lebih dalam materi ajar dan
+menuangkan dalam format materi ajar. Tugas ini merupakan Tugas Individu.
+METODE PENGERJAAN TUGAS
+Semua dokumen dalam format PDF, dan disubmit pada tautan google form dengan mengisi tahap yang sesuai
+https://forms.gle/nHWei7YjRDCkkCVC9
+
+=== PAGE 2 ===
+2
+I. PROJECT
+TAHAP PROPOSAL. Mahasiswa membuat proposal rencana penambangan data pada kasus XXXX, dimana
+Tahap ini merupakan tahap BUSINESS UNDERSTANDING atau PROBLEM STATEMENT
+TAHAP AKHIR. Dimana laporan akhir di kumpulkan dan dipresentasikan hasilnya (termasuk bila ada produk
+yang dibuat untuk pemilik data maka cukup di tampilkan).
+II. TUGAS MENULIS
+Mahasiswa membuat materi sesuai dengan materi dan minggu yang ditentukan. Berikut Minggu dan materi yang di
+persiapkan
+Minggu Perkuliahan Materi
+X Tugas Teknik Klasifikasi
+XI Tugas Teknik Kluster
+XII Tugas Teknik Asosiasi
+XIII Tugas Teknik Pengukuran
+Materi di buat dalam format PDF
+BENTUK DAN FORMAT LUARAN
+I. PROJECT
+PROPOSAL PROJECT. Terdiri atas:
+XXXX adalah Kegiatan Penambangan Data yang direncanakan, misalnya “Prediksi Curah Hujan Kota
+PROPOSAL PROJECT PENAMBANGAN DATA
+XXXXX
+Ganjil 2026-2027
+Ketua : NIM – NAMA
+NIM – NAMA
+NIM – NAMA
+NIM - NAMA
+NIM - NAMA
+Latar Belakang:
+Solusi Yang di usulkan:
+=== PAGE 3 ===
+3
+Tanjungpinang”
+- Latar Belakang. Penjelasan tentang kondisi mitra pemilik data, nama narasumber mitra dan posisi/jabatan
+narasumber mitra, asal usul data, masalah yang dihadapi oleh mitra pemilik data. Masalah yang dihadapai
+mitra bukan berarti harus di selesaikan secara langsung melalui data mining, tetapi dapat juga solusi tidak
+langsung melalui data mining
+Misal:
+…… Dari penjelasan kondisi tersebut, permasalahan yang di hadapi oleh CV MyMindGue, selalu
+mengalami deficit dalam neraca laba rugi bulanan sehingga mengalami kerugian yang cukup besar tiap
+bulan.
+Dari contoh terlihat bahwa masalah kerugian yang dihadapi mitra,
+- Solusi Yang di usulkan: penjelasan bagaimana penambangan data memberikan kontribusi dalam solusi.
+Harap di perhatikan apa apa saja yang termasuk dalam kegiatan data mining (telah dijelaskan dalam
+perkuliahan). Solusi terhadap permasalahan tidak harus secara langsung tetapi dapat juga secara tidak
+langsung. Misal:
+………….. dari pembabaran permasalahan diatas, maka tim bermaksud melakukan analisa trend produk
+terhadap barang jualan sehingga diharapkan dapat mengidentifikasi faktor yang membuat deficit.
+Dari contoh tersebut terlihat bahwa data mining dapat memberikan solusi tidak langsung terhadap masalah
+kerugian dengan memberikan gambaran laju penjualan produk sehingga diharapkan mitra dapat melakukan
+perencanaan strategi penjualan dengan lebih baik.
+Proposal di rekam dengan nama PropPD_NIM.pdf, dimana NIM adalah nim ketua tim atau salah seorang
+penanggung jawab tim
+Pada google form,
+Isi Nama dan NIM dari ketua tim sesuai dengan nim yang digunakan dalam penamaan file, serta centang
+Proposal Project Penambangan Data
+Apabila judul dan solusi dianggap tidak layak untuk dilakukan penambangan data, maka akan di informasikan
+paling lambat 1 minggu setelah tanggal deadline. Masa revisi diberikan 1 minggu setelah tanggal pengumuman
+revisi. Revisi paling banyak 2x, lebih dari itu, maka proyek menggunakan proposal versi yang terakhir diajukan
+dengan resiko nilai tidak maksimal.
+=== PAGE 4 ===
+4
+FORMAT LAPORAN AKHIR. Merupakan laporan yang sudah lengkap dan bersifat final.:
+- HALAMAN JUDUL:
+XXXX adalah Kegiatan Penambangan Data yang direncanakan, misalnya “Prediksi Curah Hujan Kota
+Tanjungpinang tahun 2027-2030”
+- DAFTAR ISI
+- DAFTAR TABEL
+- DAFTAR GAMBAR
+- BAB I BUSINESS UNDERSTANDING.
+- I.1 Latar Belakang
+- Penjelasan mengenai mitra sumber data,
+- I.2 Permasalahan
+- Apa yang menjadi permasalahan di mitra sumber dan akan diselesaikan melalui data mining
+- I.3 Tujuan Penambangan Data
+- Apa yang menjadi solusi atau tujuan dari penambangan data, tujuan yang ingin di dapatkan dari
+penambangan data, cara yang digunakan untuk mendapatkan tujuan (Ini terkait erat dengan teknik yang
+digunakan)
+- I.4 Lini Waktu Pelaksanaan
+- Berisi Gant Chart waktu pelaksanaan sesuai kenyataan. Item kegiatan sangat penting beserta waktu dan PIC
+(yang bertanggung jawab penuh pada item kegiatan tersebut)
+- BAB II DATA UNDERSTANDING
+- II.1 Teknik Pengumpulan data
+- Urainkan bagaimana data tersebut dikumpulkan. Apakah sudah tersedia atau baru dibuat. Kalau baru dibuat
+jelaskan mekanisme atau teknis mengumpulkan data termasuk justifikasi data yang digunakan,
+- II.2 Jenis data
+- Jelaskan jenis data yang digunakan
+- II.3 Exploratory data analysis
+LAPORAN AKHIR PROJECT
+PENAMBANGAN DATA
+XXXXX
+Ketua NIM – NAMA
+NIM – NAMA
+NIM - NAMA
+NIM - NAMA
+NIM - NAMA
+Teknik Informatika
+Fakultas Teknik dan Teknologi Kemaritiman
+Universitas maritim Raja Ali Haji
+2025
+=== PAGE 5 ===
+5
+- Bagaimana kondisi data, permasalahan data, summary data, representasi data atau visualisasi data, pola data
+atau sebaran data,
+- BAB III PREPROCESS.
+- III.1 Penyelesaian masalah 1
+- III.2 Penyelesaian masalah 2
+- III.3 …..
+- Tiap penyelesaian masalah data di buatkan sub bab. Contoh
+- III.1 Penyelesaian Missing Value
+- Berisi penjelasan bagaimana menangani masalah missing value pada data yang di miliki disertai contoh
+pada data tersebut….
+- III.xx Data Selection
+- III.xx Data Transformation
+- III.xx Feature Engineering
+- Bagian ini di buat sesuai kenyataan dan urutan yang digunakan. Kalau tidak ada berarti tidak usah di
+tuliskan.
+- BAB IV MODEL
+- Di bagian ini dibuatkan model melalui teknik yang digunakan dalam penambangan data beserta detail
+perhitungannya
+- BAB V EVALUASI
+- V.xx XXXXX
+- V.xx XXXXX
+- V.xx
+- Model yang di hasilkan di bab IV, harus bisa di uji tingkat kebenarannya dengan menggunakan metrik yang
+sesuai. Hasil pengujian bisa divisualisasikan.
+- BAB VI PENERAPAN
+- Berisi desain program yang menerapkan model tersebut beserta kesimpulan yang di tarik
+- VI.1. Desain Implementasi
+- VI.2. Kesimpulan
+- LAMPIRAN (berisi cuplikan data mentah, foto kegiatan, foto lokasi, screenshoot program implementasi)
+Laporan akhir di beri nama FinPD_NIM.pdf dimana NIM adalah ketua tim atau penanggung jawab tim (sama saat
+proposal)
+II. TUGAS MENULIS
+- Format penulisan bebas.
+- Cover Halaman Depan: Penambangan Data- Minggu XX-NIM dan Nama
+- Isi Materi
+Di rekam dengan nama PDXX_NIM.pdf dimana XX adalah Minggu tugas (10 sampai 13) dan NIM adalah NIM
+anda
+INDIKATOR, KRITERIA DAN BOBOT PENILAIAN
+=== PAGE 6 ===
+6
+I.PROJECT
+TAHAP PROPOSAL
+No Komponen Penilaian Tidak
+terpenuhi
+Terpenuhi
+Sebagian
+Terpenuhi
+1 Proposal memiliki masalah real dan diungkapkan dengan baik +5 +5 +30
+2 Proposal mengajukan solusi yang masuk akal dan berkaitan dengan
+masalah real baik langsung maupun tidak langsung
++10 +10 +50
+4 Mengikuti aturan project baik segi tengat waktu maupun aturan lainnya +5 +15 +20
+Total 20 100
+TAHAP AKHIR
+No Komponen Penilaian Tidak
+terpenuhi
+Terpenuhi
+Sebagian
+Terpenuhi
+1 Mampu menjabarkan jenis data yang diperoleh +0 +2.5 +5
+2 Mampu menguraikan kondisi data dengan visualisasi +2.5 +10 +15
+3 Mampu menguraikan kondisi data dengan statistik +2.5 +10 +15
+4 Mampu mendeteksi permasalahan data dan tindakan penanganannya +2.5 +5 +7.5
+5 Mampu melakukan tindakan pre-proses lainnya seperti transformasi, seleksi
+dan lain lain
++2.5 +5 +7.5
+6 Project diselesaikan dengan tuntas, sesuai aturan dan dalam kurun waktu yang
+diberikan
++0 +2.5 +5
+7 Produk aplikasi yang dihasilkan memenuhi kebutuhan +2.5 +5 +10
+8 Memberikan solusi yang paling mendekati solusi ideal (Solusi yang tidak
+memberikan penyelesaian, tetap mendapat nilai karena effort dihargai)
++0.5 +7.5 +15
+9 Laporan akhir mampu menguraikan solusi secara step-by-step atau detail
+pemikiran. (Uraian yang loncat loncat mendapat nilai karena effort dihargai)
++2.0 +5 +10
+10 Presentasi akhir dan laporan akhir mampu memberikan argumentasi atau
+alasan kenapa memilih solusi tersebut yang logis dan dapat diterima nalar.
+(Argumentasi asal asalan mendapat nilai 0 karena dianggap tidak ada effort)
++0 +5 +10
+Total 15 15 50
+ =  ∗ 25% + (ℎ ∗ 75%)
+II. TUGAS MENULIS
+No Komponen Penilaian Tidak
+terpenuhi
+seluruhnya
+Terpenuhi
+sebagian
+Terpenuhi
+1 Mengumpulkan tugas dan mengikuti tata aturan tugas (permateri) 80% -10 +40 +100
+2 Mentaati batas waktu 0 0 x 1
+3 Tidak memuat Plagiasi (permateri) x 0 n/a x 1
+4 Kedalaman Materi (20%) 0 80 100
+ = (  
+ ∗ 80%) + (  ∗ 20%)
+JADWAL PELAKSANAAN
+I.PROJECT
+PROPOSAL. Deadline submission pada hari H waktu proposal. Kesempatan revisi di beritahukan kemudian.
+=== PAGE 7 ===
+7
+AKHIR. Deadline submission pada 14 November 2026, hari Sabtu. Sesi presentasi diberikan kemudian.
+II.TUGAS MENULIS
+Deadline submit adalah sesuai hari perkuliahan minggu mengajar
+LAIN-LAIN
+DAFTAR RUJUKAN
+1. Materi Perkuliahan

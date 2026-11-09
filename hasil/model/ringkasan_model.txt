@@ -1,0 +1,30 @@
+RINGKASAN MODEL ARIMAX PER RUTE
+Split: latih sampai 2026-03-09, uji sisanya
+Variabel eksogen: flag Lebaran
+Orde d ditentukan dari uji ADF pada data latih (p<0.05 -> d=0, selain itu d=1); AIC hanya dipakai memilih p,q
+Baris SEMUA = model agregat yang dilatih sendiri pada total mingguan (bukan jumlah prediksi 5 rute)
+
+Rute SIQ<->BTH: ARIMAX(2, 0, 3), AIC=518.82, latih=61 (70.9%), uji=25
+  Rolling:  MAE=7.56, RMSE=11.43, MAPE=17.1%
+  Multi-st: MAE=13.01, RMSE=14.86, MAPE=31.04%
+
+Rute SIQ<->DJB: ARIMAX(3, 0, 3), AIC=413.98, latih=61 (70.9%), uji=25
+  Rolling:  MAE=7.12, RMSE=9.6, MAPE=15.58%
+  Multi-st: MAE=6.67, RMSE=8.93, MAPE=14.2%
+
+Rute SIQ<->PKU: ARIMAX(0, 1, 3), AIC=400.29, latih=61 (70.9%), uji=25
+  Rolling:  MAE=5.03, RMSE=7.02, MAPE=11.74%
+  Multi-st: MAE=4.75, RMSE=6.55, MAPE=10.78%
+
+Rute SIQ<->TJB: ARIMAX(3, 0, 3), AIC=426.35, latih=61 (70.9%), uji=25
+  Rolling:  MAE=7.7, RMSE=9.76, MAPE=25.1%
+  Multi-st: MAE=12.37, RMSE=14.99, MAPE=31.99%
+
+Rute SIQ<->TNJ: ARIMAX(3, 0, 3), AIC=371.96, latih=61 (70.9%), uji=25
+  Rolling:  MAE=8.21, RMSE=10.1, MAPE=31.61%
+  Multi-st: MAE=7.99, RMSE=10.62, MAPE=32.1%
+
+SEMUA RUTE (agregat): ARIMAX(2, 0, 3), AIC=580.25, latih=61 (70.9%), uji=25
+  Rolling:  MAE=14.92, RMSE=19.49, MAPE=6.87%
+  Multi-st: MAE=22.2, RMSE=31.88, MAPE=10.03%
+
